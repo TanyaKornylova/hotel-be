@@ -1,8 +1,8 @@
-package com.netcracker.hotelbe.resources;
+package com.netcracker.hotelbe.model;
 
 public class Hello {
-    private final long id;
-    private final String content;
+    private long id;
+    private String content;
 
     public Hello(long id, String content) {
         this.id = id;
