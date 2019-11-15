@@ -2,6 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.component.ApartmentClassComponent;
 import com.netcracker.hotelbe.entity.ApartmentClass;
+import com.netcracker.hotelbe.service.ApartmentClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,16 +10,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
-@ResponseBody
 @RestController
+@RequestMapping("apartments")
 public class ApartmentClassController {
 
     @Autowired
-    ApartmentClassComponent apartmentClassComponent;
+    ApartmentClassService apartmentClassService;
 
-    @GetMapping("/apartments")
+    @GetMapping
     public ResponseEntity getAllApartmentClass(){
-        return new ResponseEntity(apartmentClassComponent.getAll(), HttpStatus.OK);
+        return new ResponseEntity(apartmentClassService.getAll(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity addApartmentClass(@RequestBody ApartmentClass apartmentClass){
+        apartmentClassService.save(apartmentClass);
+        System.out.println(apartmentClass.getId());
+        return new ResponseEntity(apartmentClass, HttpStatus.OK);
     }
 
 }
