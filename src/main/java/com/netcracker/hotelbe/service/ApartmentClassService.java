@@ -16,4 +16,12 @@ public class ApartmentClassService {
     public List<ApartmentClass> getAll(){
         return apartmentClassRepository.findAll();
     }
+
+    public void save(ApartmentClass apartmentClass){
+        apartmentClassRepository.save(apartmentClass);
+    }
+
+    public ApartmentClass getOne(Long id){
+        return apartmentClassRepository.getOne(id);
+    }
 }
