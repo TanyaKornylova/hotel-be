@@ -1,14 +1,16 @@
 package com.netcracker.hotelbe.entity;
 
-import org.hibernate.validator.constraints.UniqueElements;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "ApartmentClass",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-public class ApartmentClass {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class ApartmentClass implements Serializable {
 
     @Id
     @NotNull
