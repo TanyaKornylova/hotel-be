@@ -1,14 +1,20 @@
 package com.netcracker.hotelbe.entity;
 
-import org.hibernate.validator.constraints.UniqueElements;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ApartmentClass",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-public class ApartmentClass {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class ApartmentClass implements Serializable {
 
     @Id
     @NotNull
@@ -24,6 +30,10 @@ public class ApartmentClass {
 
     @Column(name = "number_of_couchette")
     private int numberOfCouchette;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
+    private List<Apartment> apartments;
 
     public ApartmentClass() {
     }
@@ -64,5 +74,13 @@ public class ApartmentClass {
 
     public void setNumberOfCouchette(int numberOfCouchette) {
         this.numberOfCouchette = numberOfCouchette;
+    }
+
+    public List<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(List<Apartment> apartments) {
+        this.apartments = apartments;
     }
 }
