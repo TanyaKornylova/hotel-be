@@ -1,10 +1,14 @@
 package com.netcracker.hotelbe.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ApartmentClass",
@@ -26,6 +30,10 @@ public class ApartmentClass implements Serializable {
 
     @Column(name = "number_of_couchette")
     private int numberOfCouchette;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
+    private List<Apartment> apartments;
 
     public ApartmentClass() {
     }
@@ -66,5 +74,13 @@ public class ApartmentClass implements Serializable {
 
     public void setNumberOfCouchette(int numberOfCouchette) {
         this.numberOfCouchette = numberOfCouchette;
+    }
+
+    public List<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(List<Apartment> apartments) {
+        this.apartments = apartments;
     }
 }

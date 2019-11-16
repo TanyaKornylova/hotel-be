@@ -24,6 +24,7 @@ public class Apartment implements Serializable {
 
     @Id
     @NotNull
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
@@ -43,7 +44,7 @@ public class Apartment implements Serializable {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_room")
+    @JoinColumn(name="class_room")
     private ApartmentClass apartmentClass;
 
     public Apartment() {
