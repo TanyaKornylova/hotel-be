@@ -19,15 +19,41 @@ public class ApartmentClassController {
         return new ResponseEntity(apartmentClassService.getAll(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity addApartmentClass(@RequestBody ApartmentClass apartmentClass) {
-        apartmentClassService.save(apartmentClass);
-        return new ResponseEntity(apartmentClass, HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity getApartmentClassById(@PathVariable Long id) {
-        return new ResponseEntity(apartmentClassService.getOne(id), HttpStatus.OK);
+        ApartmentClass apartmentClass = apartmentClassService.readApartmentClass(id);
+        if (apartmentClass != null) {
+            return new ResponseEntity(apartmentClass, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity createApartmentClass(@RequestBody ApartmentClass apartmentClass) {
+        return new ResponseEntity(apartmentClassService.createApartmentClass(apartmentClass),
+                HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity updateApartmentClass(@RequestBody ApartmentClass apartmentClass) {
+        boolean update = apartmentClassService.updateApartmentClass(apartmentClass);
+
+        if (update) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteApartmentClass(@PathVariable Long id) {
+        boolean delete = apartmentClassService.deleteApartmentClass(id);
+        if (delete) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

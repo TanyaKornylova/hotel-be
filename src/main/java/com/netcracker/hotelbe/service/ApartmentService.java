@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ApartmentService {
@@ -18,22 +20,60 @@ public class ApartmentService {
     @Autowired
     ApartmentClassService apartmentClassService;
 
-    public List<Apartment> getAll(){
+    public List<Apartment> getAll() {
         return apartmentRepository.findAll();
     }
 
-    public boolean addApartment(Apartment apartment, Long apartmentClassId){
+    public Long createApartment(Apartment apartment, Long apartmentClassId) {
         ApartmentClass apartmentClass = apartmentClassService.getOne(apartmentClassId);
-        if(apartment!=null && apartmentClass!=null){
-           apartment.setApartmentClass(apartmentClass);
-           apartmentRepository.save(apartment);
-           return true;
-        } else {
-            return false;
+        apartment.setApartmentClass(apartmentClass);
+        Apartment save = apartmentRepository.save(apartment);
+        return save.getId();
+    }
+
+    public Apartment readApartment(Long id) {
+        try {
+            return apartmentRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 
-    public Apartment getOne(Long id){
+    public boolean updateApartment(Apartment apartment, Long apartmentClassId) {
+        Apartment update;
+        ApartmentClass apartmentClass;
+        try {
+            update = apartmentRepository.findById(apartment.getId()).get();
+            apartmentClass = apartmentClassService.getOne(apartmentClassId);
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+
+        update.setId(apartment.getId());
+        update.setRoomNumber(apartment.getRoomNumber());
+        update.setPhoto(apartment.getPhoto());
+        update.setDescription(apartment.getDescription());
+        update.setStatus(apartment.getStatus());
+        update.setApartmentClass(apartmentClass);
+
+        apartmentRepository.save(update);
+
+        return true;
+    }
+
+    public boolean deleteApartment(Long id) {
+        Apartment delete;
+        try {
+            delete = apartmentRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+
+        apartmentRepository.delete(delete);
+        return true;
+    }
+
+    public Apartment getOne(Long id) {
         return apartmentRepository.getOne(id);
     }
 }

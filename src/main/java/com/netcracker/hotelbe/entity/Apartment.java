@@ -42,7 +42,6 @@ public class Apartment implements Serializable {
     @Type( type = "pgsql_enum" )
     private ApartmentStatus status;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="class_room")
     private ApartmentClass apartmentClass;
