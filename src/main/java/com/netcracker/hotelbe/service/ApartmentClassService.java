@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ApartmentClassService {
@@ -17,11 +18,55 @@ public class ApartmentClassService {
         return apartmentClassRepository.findAll();
     }
 
-    public void save(ApartmentClass apartmentClass){
-        apartmentClassRepository.save(apartmentClass);
+    public Long createApartmentClass(ApartmentClass apartmentClass) {
+        ApartmentClass save = apartmentClassRepository.save(apartmentClass);
+
+        return save.getId();
+    }
+
+    public ApartmentClass readApartmentClass(Long id) {
+
+        try {
+            return apartmentClassRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    public boolean updateApartmentClass(ApartmentClass apartmentClass) {
+        ApartmentClass update;
+
+        try {
+            update = apartmentClassRepository.findById(apartmentClass.getId()).get();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+
+        update.setId(apartmentClass.getId());
+        update.setNameClass(apartmentClass.getNameClass());
+        update.setNumberOfRooms(apartmentClass.getNumberOfRooms());
+        update.setNumberOfCouchette(apartmentClass.getNumberOfCouchette());
+
+        apartmentClassRepository.save(update);
+
+        return true;
+    }
+
+    public boolean deleteApartmentClass(Long id) {
+        ApartmentClass delete;
+        try {
+            delete = apartmentClassRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+
+        apartmentClassRepository.delete(delete);
+
+        return true;
     }
 
     public ApartmentClass getOne(Long id){
         return apartmentClassRepository.getOne(id);
     }
+
 }
