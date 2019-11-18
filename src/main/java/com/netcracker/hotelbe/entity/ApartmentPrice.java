@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "ApartmentPrice",
+@Table(name = "ApartmentPrices",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ApartmentPrice implements Serializable {
