@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "Apartments",
@@ -45,6 +46,10 @@ public class Apartment implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="class_room")
     private ApartmentClass apartmentClass;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
+    private List<ApartmentPrice> apartmentPrices;
 
     public Apartment() {
     }
