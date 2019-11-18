@@ -18,13 +18,13 @@ public class ApartmentClassService {
         return apartmentClassRepository.findAll();
     }
 
-    public Long createApartmentClass(ApartmentClass apartmentClass) {
+    public Long save(ApartmentClass apartmentClass) {
         ApartmentClass save = apartmentClassRepository.save(apartmentClass);
 
         return save.getId();
     }
 
-    public ApartmentClass readApartmentClass(Long id) {
+    public ApartmentClass findById(Long id) {
 
         try {
             return apartmentClassRepository.findById(id).get();
@@ -33,7 +33,7 @@ public class ApartmentClassService {
         }
     }
 
-    public boolean updateApartmentClass(ApartmentClass apartmentClass) {
+    public boolean update(ApartmentClass apartmentClass) {
         ApartmentClass update;
 
         try {
@@ -52,7 +52,7 @@ public class ApartmentClassService {
         return true;
     }
 
-    public boolean deleteApartmentClass(Long id) {
+    public boolean deleteById(Long id) {
         ApartmentClass delete;
         try {
             delete = apartmentClassRepository.findById(id).get();

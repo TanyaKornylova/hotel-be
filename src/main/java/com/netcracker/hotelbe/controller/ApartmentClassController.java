@@ -15,13 +15,13 @@ public class ApartmentClassController {
     ApartmentClassService apartmentClassService;
 
     @GetMapping("/all")
-    public ResponseEntity getAllApartmentClass() {
+    public ResponseEntity getAll() {
         return new ResponseEntity(apartmentClassService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getApartmentClassById(@PathVariable Long id) {
-        ApartmentClass apartmentClass = apartmentClassService.readApartmentClass(id);
+    public ResponseEntity getById(@PathVariable Long id) {
+        ApartmentClass apartmentClass = apartmentClassService.findById(id);
         if (apartmentClass != null) {
             return new ResponseEntity(apartmentClass, HttpStatus.OK);
         } else {
@@ -30,14 +30,14 @@ public class ApartmentClassController {
     }
 
     @PostMapping
-    public ResponseEntity createApartmentClass(@RequestBody ApartmentClass apartmentClass) {
-        return new ResponseEntity(apartmentClassService.createApartmentClass(apartmentClass),
+    public ResponseEntity create(@RequestBody ApartmentClass apartmentClass) {
+        return new ResponseEntity(apartmentClassService.save(apartmentClass),
                 HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity updateApartmentClass(@RequestBody ApartmentClass apartmentClass) {
-        boolean update = apartmentClassService.updateApartmentClass(apartmentClass);
+    public ResponseEntity update(@RequestBody ApartmentClass apartmentClass) {
+        boolean update = apartmentClassService.update(apartmentClass);
 
         if (update) {
             return new ResponseEntity(HttpStatus.OK);
@@ -47,8 +47,8 @@ public class ApartmentClassController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteApartmentClass(@PathVariable Long id) {
-        boolean delete = apartmentClassService.deleteApartmentClass(id);
+    public ResponseEntity deleteById(@PathVariable Long id) {
+        boolean delete = apartmentClassService.deleteById(id);
         if (delete) {
             return new ResponseEntity(HttpStatus.OK);
         } else {

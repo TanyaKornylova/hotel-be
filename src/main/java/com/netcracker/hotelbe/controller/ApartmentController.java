@@ -14,19 +14,19 @@ public class ApartmentController {
     ApartmentService apartmentService;
 
     @GetMapping("/all")
-    public ResponseEntity getAllApartments() {
+    public ResponseEntity getAll() {
         return new ResponseEntity(apartmentService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping("/{apartmentClassId}")
-    public ResponseEntity createApartment(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
-        return new ResponseEntity(apartmentService.createApartment(apartment, apartmentClassId),
+    public ResponseEntity create(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
+        return new ResponseEntity(apartmentService.save(apartment, apartmentClassId),
                 HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity getApartmentById(@PathVariable Long id) {
-        Apartment apartment = apartmentService.readApartment(id);
+    public ResponseEntity getById(@PathVariable Long id) {
+        Apartment apartment = apartmentService.findById(id);
         if (apartment != null) {
             return new ResponseEntity(apartment, HttpStatus.OK);
         } else {
@@ -35,8 +35,8 @@ public class ApartmentController {
     }
 
     @PutMapping("{apartmentClassId}")
-    public ResponseEntity updateApartment(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
-        boolean update = apartmentService.updateApartment(apartment, apartmentClassId);
+    public ResponseEntity update(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
+        boolean update = apartmentService.update(apartment, apartmentClassId);
 
         if (update) {
             return new ResponseEntity(HttpStatus.OK);
@@ -46,8 +46,8 @@ public class ApartmentController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteApartment(@PathVariable Long id) {
-        boolean delete = apartmentService.deleteApartment(id);
+    public ResponseEntity deleteById(@PathVariable Long id) {
+        boolean delete = apartmentService.deleteById(id);
         if (delete) {
             return new ResponseEntity(HttpStatus.OK);
         } else {
