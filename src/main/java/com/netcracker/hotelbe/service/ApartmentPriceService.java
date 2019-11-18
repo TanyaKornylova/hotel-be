@@ -1,7 +1,6 @@
 package com.netcracker.hotelbe.service;
 
 import com.netcracker.hotelbe.entity.Apartment;
-import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.entity.ApartmentPrice;
 import com.netcracker.hotelbe.repository.ApartmentPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
