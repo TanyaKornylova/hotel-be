@@ -2,14 +2,12 @@ package com.netcracker.hotelbe.service;
 
 import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.entity.ApartmentClass;
-import com.netcracker.hotelbe.repository.ApartmentClassRepository;
 import com.netcracker.hotelbe.repository.ApartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class ApartmentService {
@@ -24,14 +22,14 @@ public class ApartmentService {
         return apartmentRepository.findAll();
     }
 
-    public Long createApartment(Apartment apartment, Long apartmentClassId) {
+    public Long save(Apartment apartment, Long apartmentClassId) {
         ApartmentClass apartmentClass = apartmentClassService.getOne(apartmentClassId);
         apartment.setApartmentClass(apartmentClass);
         Apartment save = apartmentRepository.save(apartment);
         return save.getId();
     }
 
-    public Apartment readApartment(Long id) {
+    public Apartment findById(Long id) {
         try {
             return apartmentRepository.findById(id).get();
         } catch (NoSuchElementException e) {
@@ -39,7 +37,7 @@ public class ApartmentService {
         }
     }
 
-    public boolean updateApartment(Apartment apartment, Long apartmentClassId) {
+    public boolean update(Apartment apartment, Long apartmentClassId) {
         Apartment update;
         ApartmentClass apartmentClass;
         try {
@@ -61,7 +59,7 @@ public class ApartmentService {
         return true;
     }
 
-    public boolean deleteApartment(Long id) {
+    public boolean deleteById(Long id) {
         Apartment delete;
         try {
             delete = apartmentRepository.findById(id).get();
