@@ -1,4 +1,4 @@
-package com.netcracker.hotelbe.model;
+package com.netcracker.hotelbe.entity.enums;
 
 import java.io.Serializable;
 

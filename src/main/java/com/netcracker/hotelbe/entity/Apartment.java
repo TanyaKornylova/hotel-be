@@ -1,8 +1,7 @@
 package com.netcracker.hotelbe.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.netcracker.hotelbe.model.ApartmentStatus;
+import com.netcracker.hotelbe.entity.enums.ApartmentStatus;
 import com.netcracker.hotelbe.utils.PostgreSQLEnumType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
