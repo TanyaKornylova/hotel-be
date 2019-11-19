@@ -13,10 +13,10 @@ import java.util.NoSuchElementException;
 public class UnavailableApartmentService {
 
     @Autowired
-    UnavailableApartmentRepository unavailableApartmentRepository;
+    private UnavailableApartmentRepository unavailableApartmentRepository;
 
     @Autowired
-    ApartmentService apartmentService;
+    private ApartmentService apartmentService;
 
     public List<UnavailableApartment> getAll() {
         return unavailableApartmentRepository.findAll();
