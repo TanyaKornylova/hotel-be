@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "Apartments",
@@ -45,15 +46,27 @@ public class Apartment implements Serializable {
     @JoinColumn(name="class_room")
     private ApartmentClass apartmentClass;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
+    private List<ApartmentPrice> apartmentPrices;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
+    private List<UnavailableApartment> unavailableApartments;
+
     public Apartment() {
     }
 
-    public Apartment(int roomNumber, String photo, String description, ApartmentStatus status, ApartmentClass apartmentClass) {
+    public Apartment(int roomNumber, String photo, String description, ApartmentStatus status,
+                     ApartmentClass apartmentClass, List<ApartmentPrice> apartmentPrices,
+                     List<UnavailableApartment> unavailableApartments) {
         this.roomNumber = roomNumber;
         this.photo = photo;
         this.description = description;
         this.status = status;
         this.apartmentClass = apartmentClass;
+        this.apartmentPrices = apartmentPrices;
+        this.unavailableApartments = unavailableApartments;
     }
 
     public long getId() {
@@ -102,5 +115,21 @@ public class Apartment implements Serializable {
 
     public void setApartmentClass(ApartmentClass apartmentClass) {
         this.apartmentClass = apartmentClass;
+    }
+
+    public List<ApartmentPrice> getApartmentPrices() {
+        return apartmentPrices;
+    }
+
+    public void setApartmentPrices(List<ApartmentPrice> apartmentPrices) {
+        this.apartmentPrices = apartmentPrices;
+    }
+
+    public List<UnavailableApartment> getUnavailableApartments() {
+        return unavailableApartments;
+    }
+
+    public void setUnavailableApartments(List<UnavailableApartment> unavailableApartments) {
+        this.unavailableApartments = unavailableApartments;
     }
 }
