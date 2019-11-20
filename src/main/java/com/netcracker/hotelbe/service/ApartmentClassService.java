@@ -2,9 +2,7 @@ package com.netcracker.hotelbe.service;
 
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.repository.ApartmentClassRepository;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import com.netcracker.hotelbe.utils.SimpleLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,57 +11,40 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ApartmentClassService {
-    private Logger logger = LogManager.getLogger(ApartmentPriceService.class);
+    private SimpleLogger logger = new SimpleLogger(ApartmentClassService.class);
 
     @Autowired
     private ApartmentClassRepository apartmentClassRepository;
 
     public List<ApartmentClass> getAll() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Find all ApartmentClass");
-        }
+        logger.trace("Find all ApartmentClass");
 
-        if (logger.isInfoEnabled()) {
-            logger.info("get all info");
-        }
+        List<ApartmentClass> apartmentClasses = apartmentClassRepository.findAll();
+        logger.info("Found " + apartmentClasses.size() + " elements");
 
-        return apartmentClassRepository.findAll();
+        return apartmentClasses;
     }
 
     public Long save(ApartmentClass apartmentClass) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Save ApartmentClass "+ apartmentClass.toString());
-        }
+        logger.trace("Save ApartmentClass");
 
         ApartmentClass save = apartmentClassRepository.save(apartmentClass);
-
         long id = save.getId();
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("Save apartment class with id "+ id);
-        }
+        logger.trace("Save apartment class with id " + id);
 
         return id;
     }
 
     public ApartmentClass findById(Long id) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Find apartment class by id " + id);
-        }
+        logger.trace("Find apartment class by id " + id);
 
         ApartmentClass apartmentClass;
 
         try {
             apartmentClass = apartmentClassRepository.findById(id).get();
-
-            if (logger.isTraceEnabled()) {
-                logger.trace("Found apartment class " + apartmentClass.toString());
-            }
-
-        } catch (NoSuchElementException e) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.trace("Apartment class with id "+id+" not found!");
-            }
+            logger.trace("Found apartment class " + apartmentClass.toString());
+        } catch (NoSuchElementException noSuchElement) {
+            logger.error("Apartment class with id " + id + " not found!", noSuchElement);
 
             apartmentClass = null;
         }
@@ -72,45 +53,25 @@ public class ApartmentClassService {
     }
 
     public boolean update(ApartmentClass apartmentClass) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Update apartment class "+ apartmentClass.toString());
-        }
+        logger.trace("Update apartment class");
 
         ApartmentClass update;
-
         boolean result;
 
         try {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Find apartment class by id "+apartmentClass.getId());
-            }
-
             update = apartmentClassRepository.findById(apartmentClass.getId()).get();
-
-            if (logger.isTraceEnabled()) {
-                logger.trace("Found apartment class "+ update.toString());
-            }
+            logger.trace("Found apartment class");
 
             update.setId(apartmentClass.getId());
             update.setNameClass(apartmentClass.getNameClass());
             update.setNumberOfRooms(apartmentClass.getNumberOfRooms());
             update.setNumberOfCouchette(apartmentClass.getNumberOfCouchette());
-
-            if (logger.isTraceEnabled()) {
-                logger.trace("Apartment class "+update.toString()+" is updated");
-            }
-
             apartmentClassRepository.save(update);
-
-            if (logger.isTraceEnabled()) {
-                logger.trace("Updated apartment class is saved");
-            }
+            logger.trace("Updated apartment class is saved");
 
             result = true;
-        } catch (NoSuchElementException e) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.trace("Apartment class with id " + apartmentClass.getId()+ " not found!");
-            }
+        } catch (NoSuchElementException noSuchElement) {
+            logger.error("Apartment class with id " + apartmentClass.getId() + " not found!", noSuchElement);
 
             result = false;
         }
@@ -119,19 +80,32 @@ public class ApartmentClassService {
     }
 
     public boolean deleteById(Long id) {
+        logger.trace("Delete apartment class by id " + id);
+
         ApartmentClass delete;
+        boolean result;
+
         try {
             delete = apartmentClassRepository.findById(id).get();
-        } catch (NoSuchElementException e) {
-            return false;
+            logger.trace("Found apartment class for delete");
+
+            apartmentClassRepository.delete(delete);
+            logger.trace("Apartment class deleted");
+
+            result = true;
+
+        } catch (NoSuchElementException noSuchElement) {
+            logger.error("Apartment class with id " + id + " not found!", noSuchElement);
+
+            result = false;
         }
 
-        apartmentClassRepository.delete(delete);
-
-        return true;
+        return result;
     }
 
     public ApartmentClass getOne(Long id) {
+        logger.trace("Get one apartment class by id " + id);
+
         return apartmentClassRepository.getOne(id);
     }
 
