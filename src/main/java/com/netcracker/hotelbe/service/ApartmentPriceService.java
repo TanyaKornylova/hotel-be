@@ -23,7 +23,7 @@ public class ApartmentPriceService {
     public List<ApartmentPrice> getAll() {
         logger.trace("Find all ApartmentPrice");
 
-        List<ApartmentPrice> apartmentPrices = apartmentPriceRepository.findAll();
+        final List<ApartmentPrice> apartmentPrices = apartmentPriceRepository.findAll();
         logger.info("Found " + apartmentPrices.size() + " elements");
 
         return apartmentPrices;
@@ -32,11 +32,11 @@ public class ApartmentPriceService {
     public Long save(ApartmentPrice apartmentPrice, Long apartmentId) {
         logger.trace("Save ApartmentPrice");
 
-        Apartment apartment = apartmentService.getOne(apartmentId);
+        final Apartment apartment = apartmentService.getOne(apartmentId);
         apartmentPrice.setApartment(apartment);
 
-        ApartmentPrice save = apartmentPriceRepository.save(apartmentPrice);
-        long id = save.getId();
+        final ApartmentPrice save = apartmentPriceRepository.save(apartmentPrice);
+        final long id = save.getId();
         logger.trace("Save apartment price with id " + id);
 
         return id;

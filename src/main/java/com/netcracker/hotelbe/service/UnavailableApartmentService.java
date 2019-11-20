@@ -23,7 +23,7 @@ public class UnavailableApartmentService {
     public List<UnavailableApartment> getAll() {
         logger.trace("Find all Unavailable Apartment");
 
-        List<UnavailableApartment> unavailableApartments = unavailableApartmentRepository.findAll();
+        final List<UnavailableApartment> unavailableApartments = unavailableApartmentRepository.findAll();
         logger.info("Found " + unavailableApartments.size() + " elements");
 
         return unavailableApartments;
@@ -32,11 +32,11 @@ public class UnavailableApartmentService {
     public Long save(UnavailableApartment unavailableApartment, Long apartmentId) {
         logger.trace("Save UnavailableApartment");
 
-        Apartment apartment = apartmentService.getOne(apartmentId);
+        final Apartment apartment = apartmentService.getOne(apartmentId);
         unavailableApartment.setApartment(apartment);
-        UnavailableApartment save = unavailableApartmentRepository.save(unavailableApartment);
+        final UnavailableApartment save = unavailableApartmentRepository.save(unavailableApartment);
 
-        long id = save.getId();
+        final long id = save.getId();
         logger.trace("Save apartment with id " + id);
 
         return id;

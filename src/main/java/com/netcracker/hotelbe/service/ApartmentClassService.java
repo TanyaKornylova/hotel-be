@@ -19,7 +19,7 @@ public class ApartmentClassService {
     public List<ApartmentClass> getAll() {
         logger.trace("Find all ApartmentClass");
 
-        List<ApartmentClass> apartmentClasses = apartmentClassRepository.findAll();
+        final List<ApartmentClass> apartmentClasses = apartmentClassRepository.findAll();
         logger.info("Found " + apartmentClasses.size() + " elements");
 
         return apartmentClasses;
@@ -28,8 +28,8 @@ public class ApartmentClassService {
     public Long save(ApartmentClass apartmentClass) {
         logger.trace("Save ApartmentClass");
 
-        ApartmentClass save = apartmentClassRepository.save(apartmentClass);
-        long id = save.getId();
+        final ApartmentClass save = apartmentClassRepository.save(apartmentClass);
+        final long id = save.getId();
         logger.trace("Save apartment class with id " + id);
 
         return id;

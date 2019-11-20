@@ -4,10 +4,8 @@ import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.repository.ApartmentRepository;
 import com.netcracker.hotelbe.utils.SimpleLogger;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,7 +23,7 @@ public class ApartmentService {
     public List<Apartment> getAll() {
         logger.trace("Find all Apartment");
 
-        List<Apartment> apartments = apartmentRepository.findAll();
+        final List<Apartment> apartments = apartmentRepository.findAll();
         logger.info("Found " + apartments.size() + " elements");
 
         return apartments;
@@ -34,11 +32,11 @@ public class ApartmentService {
     public Long save(Apartment apartment, Long apartmentClassId) {
         logger.trace("Save Apartment");
 
-        ApartmentClass apartmentClass = apartmentClassService.getOne(apartmentClassId);
+        final ApartmentClass apartmentClass = apartmentClassService.getOne(apartmentClassId);
         apartment.setApartmentClass(apartmentClass);
 
-        Apartment save = apartmentRepository.save(apartment);
-        long id = save.getId();
+        final Apartment save = apartmentRepository.save(apartment);
+        final long id = save.getId();
         logger.trace("Save apartment with id " + id);
 
         return id;

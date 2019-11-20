@@ -6,11 +6,9 @@ import org.apache.log4j.Priority;
 
 public class SimpleLogger {
     private Logger logger;
-    private Class clazz;
 
     public SimpleLogger(Class clazz) {
         logger = LogManager.getLogger(clazz);
-        this.clazz = clazz;
     }
 
     public void trace(String message) {
