@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface ApartmentClassRepository extends JpaRepository<ApartmentClass, Long> {
 
     @Transactional(readOnly = true)
+    @Override
     Optional<ApartmentClass> findById(Long id);
 }

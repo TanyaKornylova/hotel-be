@@ -13,10 +13,10 @@ import java.util.NoSuchElementException;
 public class ApartmentService {
 
     @Autowired
-    ApartmentRepository apartmentRepository;
+    private ApartmentRepository apartmentRepository;
 
     @Autowired
-    ApartmentClassService apartmentClassService;
+    private ApartmentClassService apartmentClassService;
 
     public List<Apartment> getAll() {
         return apartmentRepository.findAll();
