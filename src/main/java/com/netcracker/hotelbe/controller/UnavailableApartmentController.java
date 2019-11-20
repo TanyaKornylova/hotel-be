@@ -2,7 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.UnavailableApartment;
 import com.netcracker.hotelbe.service.UnavailableApartmentService;
-import org.apache.log4j.Logger;
+import com.netcracker.hotelbe.utils.SimpleLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("unavailable-apartment")
 public class UnavailableApartmentController {
-    private final static Logger logger = Logger.getLogger(UnavailableApartmentController.class);
+    private SimpleLogger logger = new SimpleLogger(UnavailableApartmentController.class);
     private final static String UNAVAILABLE_APARTMENT_BY_ID_NOT_FOUND = "Unavailable apartment by id: %d not found!";
 
 
     @Autowired
-    UnavailableApartmentService unavailableApartmentService;
+    private UnavailableApartmentService unavailableApartmentService;
 
     @GetMapping("/all")
     public ResponseEntity getAll() {
@@ -38,7 +38,7 @@ public class UnavailableApartmentController {
     public ResponseEntity getById(@PathVariable Long id) {
         logger.info("Request for get unavailable apartment by id: " + id);
 
-        UnavailableApartment unavailableApartment = unavailableApartmentService.findById(id);
+        final UnavailableApartment unavailableApartment = unavailableApartmentService.findById(id);
         if (unavailableApartment != null) {
             return new ResponseEntity(unavailableApartment, HttpStatus.OK);
         } else {
@@ -53,7 +53,7 @@ public class UnavailableApartmentController {
                                  @PathVariable Long apartmentId) {
         logger.info("Request for update unavailable apartment by id: " + unavailableApartment.getId() + " and apartmentId: " + apartmentId);
 
-        boolean update = unavailableApartmentService.update(unavailableApartment, apartmentId);
+        final boolean update = unavailableApartmentService.update(unavailableApartment, apartmentId);
 
         if (update) {
             return new ResponseEntity(HttpStatus.OK);
@@ -66,9 +66,9 @@ public class UnavailableApartmentController {
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteById(@PathVariable Long id) {
-        logger.info("Request for delete unavailable apartment by id: " +id);
+        logger.info("Request for delete unavailable apartment by id: " + id);
 
-        boolean delete = unavailableApartmentService.deleteById(id);
+        final boolean delete = unavailableApartmentService.deleteById(id);
         if (delete) {
             return new ResponseEntity(HttpStatus.OK);
         } else {

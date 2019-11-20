@@ -1,9 +1,7 @@
 package com.netcracker.hotelbe.service;
 
 import com.netcracker.hotelbe.entity.Staff;
-import com.netcracker.hotelbe.entity.User;
 import com.netcracker.hotelbe.repository.StaffRepository;
-import com.netcracker.hotelbe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
