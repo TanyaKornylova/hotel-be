@@ -32,7 +32,7 @@ public class ApartmentPriceService {
     public Long save(ApartmentPrice apartmentPrice, Long apartmentId) {
         logger.trace("Save ApartmentPrice");
 
-        final Apartment apartment = apartmentService.getOne(apartmentId);
+        final Apartment apartment = apartmentService.findById(apartmentId);
         apartmentPrice.setApartment(apartment);
 
         final ApartmentPrice save = apartmentPriceRepository.save(apartmentPrice);
@@ -70,7 +70,7 @@ public class ApartmentPriceService {
             update = apartmentPriceRepository.findById(apartmentPrice.getId()).get();
             logger.trace("Found apartment price");
 
-            apartment = apartmentService.getOne(apartmentId);
+            apartment = apartmentService.findById(apartmentId);
             logger.trace("Found apartment");
 
             update.setId(apartmentPrice.getId());
