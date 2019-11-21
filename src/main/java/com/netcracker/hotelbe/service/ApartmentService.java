@@ -3,7 +3,9 @@ package com.netcracker.hotelbe.service;
 import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.repository.ApartmentRepository;
-import com.netcracker.hotelbe.utils.SimpleLogger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ApartmentService {
-    private SimpleLogger logger = new SimpleLogger(ApartmentPriceService.class);
+    private Logger logger = LogManager.getLogger(ApartmentPriceService.class);
 
     @Autowired
     private ApartmentRepository apartmentRepository;
@@ -32,13 +34,17 @@ public class ApartmentService {
     public Long save(Apartment apartment, Long apartmentClassId) {
         logger.trace("Save Apartment");
 
-        final ApartmentClass apartmentClass = apartmentClassService.getOne(apartmentClassId);
-        apartment.setApartmentClass(apartmentClass);
+        final ApartmentClass apartmentClass = apartmentClassService.findById(apartmentClassId);
+        long id;
+        if (apartmentClass != null) {
+            apartment.setApartmentClass(apartmentClass);
 
-        final Apartment save = apartmentRepository.save(apartment);
-        final long id = save.getId();
-        logger.trace("Save apartment with id " + id);
-
+            final Apartment save = apartmentRepository.save(apartment);
+            id = save.getId();
+            logger.trace("Save apartment with id " + id);
+        } else {
+            id = -1;
+        }
         return id;
     }
 
@@ -51,8 +57,9 @@ public class ApartmentService {
             apartment = apartmentRepository.findById(id).get();
             logger.trace("Found apartment");
         } catch (NoSuchElementException noSuchElement) {
-            logger.error("Apartment with id " + id + " not found!", noSuchElement);
-
+            if (logger.isEnabledFor(Priority.ERROR)) {
+                logger.error("Apartment with id " + id + " not found!", noSuchElement);
+            }
             apartment = null;
         }
 
@@ -60,7 +67,7 @@ public class ApartmentService {
     }
 
     public boolean update(Apartment apartment, Long apartmentClassId) {
-        logger.trace("Update apartment " + apartment.toString());
+        logger.trace("Update apartment");
 
         Apartment update;
         ApartmentClass apartmentClass;
@@ -70,21 +77,27 @@ public class ApartmentService {
             update = apartmentRepository.findById(apartment.getId()).get();
             logger.trace("Found apartment");
 
-            apartmentClass = apartmentClassService.getOne(apartmentClassId);
-            logger.trace("Found apartment class");
+            apartmentClass = apartmentClassService.findById(apartmentClassId);
 
-            update.setId(apartment.getId());
-            update.setRoomNumber(apartment.getRoomNumber());
-            update.setPhoto(apartment.getPhoto());
-            update.setDescription(apartment.getDescription());
-            update.setStatus(apartment.getStatus());
-            update.setApartmentClass(apartmentClass);
-            apartmentRepository.save(update);
-            logger.trace("Updated apartment is saved");
+            if (apartmentClass != null) {
+                logger.trace("Found apartment class");
+                update.setId(apartment.getId());
+                update.setRoomNumber(apartment.getRoomNumber());
+                update.setPhoto(apartment.getPhoto());
+                update.setDescription(apartment.getDescription());
+                update.setStatus(apartment.getStatus());
+                update.setApartmentClass(apartmentClass);
+                apartmentRepository.save(update);
+                logger.trace("Updated apartment is saved");
 
-            result = true;
+                result = true;
+            } else {
+                result = false;
+            }
         } catch (NoSuchElementException noSuchElement) {
-            logger.error("Apartment with id " + apartment.getId() + " not found!", noSuchElement);
+            if (logger.isEnabledFor(Priority.ERROR)) {
+                logger.error("Apartment with id " + apartment.getId() + " not found!", noSuchElement);
+            }
 
             result = false;
         }
@@ -107,17 +120,13 @@ public class ApartmentService {
 
             result = true;
         } catch (NoSuchElementException noSuchElement) {
-            logger.error("Apartment with id " + id + " not found!", noSuchElement);
-
+            if (logger.isEnabledFor(Priority.ERROR)) {
+                logger.error("Apartment with id " + id + " not found!", noSuchElement);
+            }
             result = false;
         }
 
         return result;
     }
 
-    public Apartment getOne(Long id) {
-        logger.trace("Get one apartment by id " + id);
-
-        return apartmentRepository.getOne(id);
-    }
 }
