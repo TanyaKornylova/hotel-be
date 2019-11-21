@@ -29,6 +29,9 @@ public class StaffService {
     }
 
     public void deleteById(Long id){
+        if (!staffRepository.findById(id).isPresent()){
+            throw new EntityNotFoundException("No entity with id=" + id + " found");
+        }
         staffRepository.setStatusById(false, id);
     }
 }

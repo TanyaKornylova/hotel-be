@@ -33,7 +33,7 @@ public class Staff {
     private StaffSpeciality speciality;
 
     @Column(name = "isactive")
-    private boolean isActive;
+    private boolean active;
 
 
 }
