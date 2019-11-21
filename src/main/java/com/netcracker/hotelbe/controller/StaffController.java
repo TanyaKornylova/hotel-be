@@ -3,6 +3,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.Staff;
 import com.netcracker.hotelbe.service.StaffService;
+import com.netcracker.hotelbe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ public class StaffController {
 
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping
@@ -38,6 +41,7 @@ public class StaffController {
     @PutMapping("/{id}")
     public ResponseEntity<Long> updateStaff(@RequestBody @Valid Staff staff, @PathVariable("id") Long id){
         staff.setId(id);
+        staff.setUser(userService.findById(id));
         return new ResponseEntity<>(staffService.save(staff).getId(), HttpStatus.OK);
     }
 
