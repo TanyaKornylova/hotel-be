@@ -36,7 +36,8 @@ public class StaffController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateStaff(@RequestBody @Valid Staff staff){
+    public ResponseEntity<Long> updateStaff(@RequestBody @Valid Staff staff, @PathVariable("id") Long id){
+        staff.setId(id);
         return new ResponseEntity<>(staffService.save(staff).getId(), HttpStatus.OK);
     }
 

@@ -30,6 +30,9 @@ public class TaskService {
     }
 
     public void deleteById(Long id){
+        if (!taskRepository.findById(id).isPresent()){
+            throw new EntityNotFoundException("No entity with id=" + id + " found");
+        }
         taskRepository.deleteById(id);
     }
 

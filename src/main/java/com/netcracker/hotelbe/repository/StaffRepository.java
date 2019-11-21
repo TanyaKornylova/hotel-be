@@ -14,6 +14,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE Staff s SET s.isActive = :active WHERE s.id = :id")
+    @Query("UPDATE Staff s SET s.active = :active WHERE s.id = :id")
     public void setStatusById(@Param("active") Boolean active, @Param("id") Long id);
 }

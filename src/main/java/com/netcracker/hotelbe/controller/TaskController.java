@@ -46,7 +46,8 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTaskById(@RequestBody @Valid Task task, BindingResult bindingResult) throws MethodArgumentNotValidException{
+    public ResponseEntity<Task> updateTaskById(@RequestBody @Valid Task task, @PathVariable("id") Long id, BindingResult bindingResult) throws MethodArgumentNotValidException{
+        task.setId(id);
         taskValidator.validate(task, bindingResult);
         if(bindingResult.hasErrors()){
             throw new MethodArgumentNotValidException(null, bindingResult);

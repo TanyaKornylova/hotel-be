@@ -25,6 +25,9 @@ public class UserService {
     }
 
     public void deleteById(Long id){
+        if (!userRepository.findById(id).isPresent()){
+            throw new EntityNotFoundException("No entity with id=" + id + " found");
+        }
         userRepository.deleteById(id);
     }
 
