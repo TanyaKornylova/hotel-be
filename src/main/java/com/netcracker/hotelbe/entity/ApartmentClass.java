@@ -2,14 +2,14 @@ package com.netcracker.hotelbe.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "ApartmentClass",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
@@ -34,53 +34,4 @@ public class ApartmentClass implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
     private List<Apartment> apartments;
-
-    public ApartmentClass() {
-    }
-
-    public ApartmentClass(String nameClass, int numberOfRooms, int numberOfCouchette) {
-        this.nameClass = nameClass;
-        this.numberOfRooms = numberOfRooms;
-        this.numberOfCouchette = numberOfCouchette;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNameClass() {
-        return nameClass;
-    }
-
-    public void setNameClass(String nameClass) {
-        this.nameClass = nameClass;
-    }
-
-    public int getNumberOfRooms() {
-        return numberOfRooms;
-    }
-
-    public void setNumberOfRooms(int numberOfRooms) {
-        this.numberOfRooms = numberOfRooms;
-    }
-
-    public int getNumberOfCouchette() {
-        return numberOfCouchette;
-    }
-
-    public void setNumberOfCouchette(int numberOfCouchette) {
-        this.numberOfCouchette = numberOfCouchette;
-    }
-
-    public List<Apartment> getApartments() {
-        return apartments;
-    }
-
-    public void setApartments(List<Apartment> apartments) {
-        this.apartments = apartments;
-    }
 }

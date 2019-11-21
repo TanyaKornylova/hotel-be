@@ -2,7 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.ApartmentPrice;
 import com.netcracker.hotelbe.service.ApartmentPriceService;
-import org.apache.log4j.Logger;
+import com.netcracker.hotelbe.utils.SimpleLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("apartment-price")
 public class ApartmentPriceController {
-    private final static Logger logger = Logger.getLogger(ApartmentPriceController.class);
+    private SimpleLogger logger = new SimpleLogger(ApartmentPriceController.class);
     private final static String APARTMENT_PRICE_BY_ID_NOT_FOUND = "Apartment price by id: %d not found!";
 
 
     @Autowired
-    ApartmentPriceService apartmentPriceService;
+    private ApartmentPriceService apartmentPriceService;
 
     @GetMapping("/all")
     public ResponseEntity getAll() {
@@ -38,7 +38,7 @@ public class ApartmentPriceController {
     public ResponseEntity getById(@PathVariable Long id) {
         logger.info("Request for get apartment price by id: " + id);
 
-        ApartmentPrice apartmentPrice = apartmentPriceService.findById(id);
+        final ApartmentPrice apartmentPrice = apartmentPriceService.findById(id);
         if (apartmentPrice != null) {
             return new ResponseEntity(apartmentPrice, HttpStatus.OK);
         } else {
@@ -53,7 +53,7 @@ public class ApartmentPriceController {
                                  @PathVariable Long apartmentId) {
         logger.info("Request for update apartment price by id: " + apartmentPrice.getId() + " and apartmentId: " + apartmentId);
 
-        boolean update = apartmentPriceService.update(apartmentPrice, apartmentId);
+        final boolean update = apartmentPriceService.update(apartmentPrice, apartmentId);
 
         if (update) {
             return new ResponseEntity(HttpStatus.OK);
@@ -66,9 +66,10 @@ public class ApartmentPriceController {
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteById(@PathVariable Long id) {
-        logger.info("Request for delete apartment price by id: " +id);
+        logger.info("Request for delete apartment price by id: " + id);
 
-        boolean delete = apartmentPriceService.deleteById(id);
+
+        final boolean delete = apartmentPriceService.deleteById(id);
         if (delete) {
             return new ResponseEntity(HttpStatus.OK);
         } else {
