@@ -56,13 +56,12 @@ public class BookingService {
         Apartment apartment;
         try {
             update = bookingRepository.findById(booking.getId()).get();
-            apartmentClass = apartmentClassService.getOne(apartmentClassId);
+            apartmentClass = apartmentClassService.findById(apartmentClassId);
             user = userService.findById(userId);
             apartment = apartmentService.findById(apartmentId);
         } catch (NoSuchElementException e) {
             return false;
         }
-
         update.setId(booking.getId());
         update.setBookingStatus(booking.getBookingStatus());
         update.setComments(booking.getComments());

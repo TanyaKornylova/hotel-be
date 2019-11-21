@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.netcracker.hotelbe.entity.enums.BookingStatus;
 import com.netcracker.hotelbe.utils.PostgreSQLEnumType;
+import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.Id;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@Data
 @Table(name = "Bookings",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

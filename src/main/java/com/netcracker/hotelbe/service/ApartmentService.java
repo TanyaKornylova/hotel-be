@@ -32,7 +32,7 @@ public class ApartmentService {
     public Long save(Apartment apartment, Long apartmentClassId) {
         logger.trace("Save Apartment");
 
-        final ApartmentClass apartmentClass = apartmentClassService.getOne(apartmentClassId);
+        final ApartmentClass apartmentClass = apartmentClassService.findById(apartmentClassId);
         apartment.setApartmentClass(apartmentClass);
 
         final Apartment save = apartmentRepository.save(apartment);
@@ -70,7 +70,7 @@ public class ApartmentService {
             update = apartmentRepository.findById(apartment.getId()).get();
             logger.trace("Found apartment");
 
-            apartmentClass = apartmentClassService.getOne(apartmentClassId);
+            apartmentClass = apartmentClassService.findById(apartmentClassId);
             logger.trace("Found apartment class");
 
             update.setId(apartment.getId());
@@ -115,9 +115,4 @@ public class ApartmentService {
         return result;
     }
 
-    public Apartment getOne(Long id) {
-        logger.trace("Get one apartment by id " + id);
-
-        return apartmentRepository.getOne(id);
-    }
 }

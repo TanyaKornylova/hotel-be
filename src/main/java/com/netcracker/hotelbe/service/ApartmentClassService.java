@@ -103,10 +103,4 @@ public class ApartmentClassService {
         return result;
     }
 
-    public ApartmentClass getOne(Long id) {
-        logger.trace("Get one apartment class by id " + id);
-
-        return apartmentClassRepository.getOne(id);
-    }
-
 }

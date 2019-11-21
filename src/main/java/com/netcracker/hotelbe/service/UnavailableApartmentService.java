@@ -32,7 +32,7 @@ public class UnavailableApartmentService {
     public Long save(UnavailableApartment unavailableApartment, Long apartmentId) {
         logger.trace("Save UnavailableApartment");
 
-        final Apartment apartment = apartmentService.getOne(apartmentId);
+        final Apartment apartment = apartmentService.findById(apartmentId);
         unavailableApartment.setApartment(apartment);
         final UnavailableApartment save = unavailableApartmentRepository.save(unavailableApartment);
 
@@ -70,7 +70,7 @@ public class UnavailableApartmentService {
             update = unavailableApartmentRepository.findById(unavailableApartment.getId()).get();
             logger.trace("Found UnavailableApartment " + update.toString());
 
-            apartment = apartmentService.getOne(apartmentId);
+            apartment = apartmentService.findById(apartmentId);
             logger.trace("Found apartment " + apartment.toString());
 
             update.setId(unavailableApartment.getId());
