@@ -3,12 +3,10 @@ package com.netcracker.hotelbe.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 @Entity

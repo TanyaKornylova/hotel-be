@@ -14,6 +14,6 @@ public class ApartmentClassComponent {
     private ApartmentClassService apartmentClassService;
 
     public List<ApartmentClass> getAll(){
-       return apartmentClassService.getAll();
+       return apartmentClassService.findAll();
     }
 }

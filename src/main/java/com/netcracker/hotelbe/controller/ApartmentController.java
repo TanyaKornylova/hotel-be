@@ -2,6 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.service.ApartmentService;
+import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,75 +10,52 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("apartment")
 public class ApartmentController {
     private static Logger logger = LogManager.getLogger(ApartmentController.class);
-    private final static String APARTMENT_BY_ID_NOT_FOUND = "Apartment by id: %d not found!";
+    private final static String ENTITY_NAME = Apartment.class.getSimpleName();
 
     @Autowired
     private ApartmentService apartmentService;
 
     @GetMapping("/all")
     public ResponseEntity getAll() {
-        logger.info("Request for get all apartments");
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
         return new ResponseEntity(apartmentService.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity getById(@PathVariable("id") final Long id) {
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ENTITY_BY_ID, ENTITY_NAME, id));
+
+        return new ResponseEntity(apartmentService.findById(id), HttpStatus.OK);
+    }
+
     @PostMapping("/{apartmentClassId}")
-    public ResponseEntity create(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
-        logger.info("Request for create apartment with apartmentClassId: " + apartmentClassId);
+    public ResponseEntity create(@RequestBody @Valid Apartment apartment, @PathVariable("apartmentClassId") final Long apartmentClassId) {
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
-        final long id = apartmentService.save(apartment, apartmentClassId);
-        if (id > 0) {
-            return new ResponseEntity(id, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(apartmentService.save(apartment, apartmentClassId), HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity getById(@PathVariable Long id) {
-        logger.info("Request for get apartment by id: " + id);
+    @PutMapping("/{apartmentClassId}")
+    public ResponseEntity update(@RequestBody @Valid Apartment apartment, @PathVariable("apartmentClassId") final Long apartmentClassId) {
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartment.getId()));
 
-        final Apartment apartment = apartmentService.findById(id);
-        if (apartment != null) {
-            return new ResponseEntity(apartment, HttpStatus.OK);
-        } else {
-            logger.warn(String.format(APARTMENT_BY_ID_NOT_FOUND, id));
-
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(apartmentService.update(apartment, apartmentClassId), HttpStatus.OK);
     }
 
-    @PutMapping("{apartmentClassId}")
-    public ResponseEntity update(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
-        logger.info("Request for update apartment by id: " + apartment.getId() + " and apartmentClassId: " + apartmentClassId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteById(@PathVariable("id") final Long id) {
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
 
-        final boolean update = apartmentService.update(apartment, apartmentClassId);
+        apartmentService.deleteById(id);
 
-        if (update) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.warn("Apartment by id: " + apartment.getId() + " and apartmentClassId: " + apartmentClassId + " not found!");
-
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseEntity deleteById(@PathVariable Long id) {
-        logger.info("Request for delete apartment by id: " + id);
-
-        final boolean delete = apartmentService.deleteById(id);
-        if (delete) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.warn(String.format(APARTMENT_BY_ID_NOT_FOUND, id));
-
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
