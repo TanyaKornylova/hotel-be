@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -25,6 +26,7 @@ public class ApartmentPrice implements Serializable {
     private long id;
 
     @Column(name = "price")
+    @Min(value = 0, message = "Price cant be less then 0")
     private int price;
 
     @Column(name = "start_period")

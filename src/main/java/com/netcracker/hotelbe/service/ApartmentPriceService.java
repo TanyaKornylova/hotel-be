@@ -1,20 +1,24 @@
 package com.netcracker.hotelbe.service;
 
 import com.netcracker.hotelbe.entity.Apartment;
+import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.entity.ApartmentPrice;
 import com.netcracker.hotelbe.repository.ApartmentPriceRepository;
+import com.netcracker.hotelbe.utils.CustomEntityMessage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 public class ApartmentPriceService {
     private static Logger logger = LogManager.getLogger(ApartmentPriceService.class);
+    private final static String ENTITY_NAME = ApartmentPrice.class.getSimpleName();
 
     @Autowired
     private ApartmentPriceRepository apartmentPriceRepository;
@@ -22,108 +26,69 @@ public class ApartmentPriceService {
     @Autowired
     private ApartmentService apartmentService;
 
-    public List<ApartmentPrice> getAll() {
-        logger.trace("Find all ApartmentPrice");
+    public List<ApartmentPrice> findAll() {
+        logger.trace(String.format(CustomEntityMessage.FIND_ALL_ENTITY, ENTITY_NAME));
 
         final List<ApartmentPrice> apartmentPrices = apartmentPriceRepository.findAll();
-        logger.info("Found " + apartmentPrices.size() + " elements");
+        logger.info(String.format(CustomEntityMessage.FOUND_AMOUNT_ELEMENT, apartmentPrices.size()));
 
         return apartmentPrices;
     }
 
-    public Long save(ApartmentPrice apartmentPrice, Long apartmentId) {
-        logger.trace("Save ApartmentPrice");
+    public Long save(ApartmentPrice apartmentPrice, final Long apartmentId) {
+        logger.trace(String.format(CustomEntityMessage.SAVE_ENTITY, ENTITY_NAME));
 
         final Apartment apartment = apartmentService.findById(apartmentId);
-        long id;
-        if (apartment != null) {
-            apartmentPrice.setApartment(apartment);
+        apartmentPrice.setApartment(apartment);
 
-            final ApartmentPrice save = apartmentPriceRepository.save(apartmentPrice);
-            id = save.getId();
-            logger.trace("Save apartment price with id " + id);
-        } else {
-            id = -1;
-        }
+        final ApartmentPrice save = apartmentPriceRepository.save(apartmentPrice);
+        final Long id = save.getId();
+        logger.trace(String.format(CustomEntityMessage.SAVE_ENTITY_WITH_ID, ENTITY_NAME, id));
+
         return id;
     }
 
-    public ApartmentPrice findById(Long id) {
-        logger.trace("Find apartment price by id " + id);
+    public ApartmentPrice findById(final Long id) {
+        logger.trace(String.format(CustomEntityMessage.FIND_ENTITY_BY_ID, ENTITY_NAME, id));
 
-        ApartmentPrice apartmentPrice;
-
-        try {
-            apartmentPrice = apartmentPriceRepository.findById(id).get();
-            logger.trace("Found apartment price");
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Apartment price with id " + id + " not found!", noSuchElement);
-            }
-            apartmentPrice = null;
-        }
-
-        return apartmentPrice;
+        return apartmentPriceRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
     }
 
-    public boolean update(ApartmentPrice apartmentPrice, Long apartmentId) {
-        logger.trace("Update apartment price");
+    public Long update(final ApartmentPrice apartmentPrice, final Long apartmentId) {
+        logger.trace(String.format(CustomEntityMessage.UPDATE_ENTITY, ENTITY_NAME));
+        final Long apartmentPriceId = apartmentPrice.getId();
 
-        ApartmentPrice update;
-        Apartment apartment;
-        boolean result;
+        final Apartment apartment = apartmentService.findById(apartmentId);
+        logger.trace(String.format(CustomEntityMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
 
-        try {
-            update = apartmentPriceRepository.findById(apartmentPrice.getId()).get();
-            logger.trace("Found apartment price");
 
-            apartment = apartmentService.findById(apartmentId);
+        ApartmentPrice update = apartmentPriceRepository.findById(apartmentPrice.getId()).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(apartmentPriceId))
+        );
+        logger.trace(String.format(CustomEntityMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
 
-            if(apartment!=null) {
-                logger.trace("Found apartment");
-                update.setId(apartmentPrice.getId());
-                update.setPrice(apartmentPrice.getPrice());
-                update.setStartPeriod(apartmentPrice.getStartPeriod());
-                update.setEndPeriod(apartmentPrice.getEndPeriod());
-                update.setApartment(apartment);
-                apartmentPriceRepository.save(update);
-                logger.trace("Updated apartment price is saved");
+        update.setPrice(apartmentPrice.getPrice());
+        update.setStartPeriod(apartmentPrice.getStartPeriod());
+        update.setEndPeriod(apartmentPrice.getEndPeriod());
+        update.setApartment(apartment);
+        update = apartmentPriceRepository.save(update);
+        logger.trace(String.format(CustomEntityMessage.UPDATED_ENTITY_SAVED, ENTITY_NAME));
 
-                result = true;
-            } else {
-                result = false;
-            }
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Apartment price with id " + apartmentPrice.getId() + " not found!", noSuchElement);
-            }
-            result = false;
-        }
-
-        return result;
+        return update.getId();
     }
 
-    public boolean deleteById(Long id) {
-        logger.trace("Delete apartment price by id " + id);
+    public void deleteById(final Long id) {
+        logger.trace(String.format(CustomEntityMessage.DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
 
-        ApartmentPrice delete;
-        boolean result;
+        final ApartmentPrice delete = apartmentPriceRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
+        logger.trace(String.format(CustomEntityMessage.FOUND_ENTITY_FOR_DELETE, ENTITY_NAME));
 
-        try {
-            delete = apartmentPriceRepository.findById(id).get();
-            logger.trace("Found apartment price for delete");
-
-            apartmentPriceRepository.delete(delete);
-            logger.trace("Apartment price deleted");
-
-            result = true;
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Apartment price with id " + id + " not found!", noSuchElement);
-            }
-            result = false;
-        }
-
-        return result;
+        apartmentPriceRepository.delete(delete);
+        logger.trace(String.format(CustomEntityMessage.ENTITY_DELETED, ENTITY_NAME));
     }
+
 }
