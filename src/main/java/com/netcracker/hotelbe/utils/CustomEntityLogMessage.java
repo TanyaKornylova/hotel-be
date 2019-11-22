@@ -1,6 +1,7 @@
 package com.netcracker.hotelbe.utils;
 
 public final class CustomEntityLogMessage {
+
     public final static String FIND_ALL_ENTITY = "Find all %s";
     public final static String FIND_ENTITY_BY_ID = "Find %s by id %d";
     public final static String FOUND_ENTITY_WITH_ID = "Found %s with id %d";
