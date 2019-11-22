@@ -1,14 +1,14 @@
 package com.netcracker.hotelbe.repository;
 
-import com.netcracker.hotelbe.entity.ApartmentClass;
+import com.netcracker.hotelbe.entity.ApartmentPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-public interface ApartmentClassRepository extends JpaRepository<ApartmentClass, Long> {
+public interface ApartmentPriceRepository extends JpaRepository<ApartmentPrice, Long> {
 
     @Transactional(readOnly = true)
     @Override
-    Optional<ApartmentClass> findById(Long id);
+    Optional<ApartmentPrice> findById(Long id);
 }

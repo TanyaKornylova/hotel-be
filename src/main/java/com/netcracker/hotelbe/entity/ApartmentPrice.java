@@ -1,20 +1,19 @@
 package com.netcracker.hotelbe.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "ApartmentClass",
+@Table(name = "ApartmentPrices",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class ApartmentClass implements Serializable {
+public class ApartmentPrice implements Serializable {
 
     @Id
     @NotNull
@@ -22,16 +21,19 @@ public class ApartmentClass implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name_class")
-    private String nameClass;
+    @Column(name = "price")
+    private int price;
 
-    @Column(name = "number_of_rooms")
-    private int numberOfRooms;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "start_period")
+    private Date startPeriod;
 
-    @Column(name = "number_of_couchette")
-    private int numberOfCouchette;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "end_period")
+    private Date endPeriod;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
-    private List<Apartment> apartments;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "apartment_id")
+    private Apartment apartment;
+
 }
