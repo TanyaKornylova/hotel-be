@@ -2,7 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.service.ApartmentClassService;
-import com.netcracker.hotelbe.utils.CustomEntityMessage;
+import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +23,21 @@ public class ApartmentClassController {
 
     @GetMapping("/all")
     public ResponseEntity getAll() {
-        logger.info(String.format(CustomEntityMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
         return new ResponseEntity(apartmentClassService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable("id") final Long id) {
-        logger.info(String.format(CustomEntityMessage.REQUEST_FOR_GET_ENTITY_BY_ID, ENTITY_NAME, id));
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ENTITY_BY_ID, ENTITY_NAME, id));
 
         return new ResponseEntity(apartmentClassService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid ApartmentClass apartmentClass) {
-        logger.info(String.format(CustomEntityMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
         return new ResponseEntity(apartmentClassService.save(apartmentClass),
                 HttpStatus.OK);
@@ -45,14 +45,14 @@ public class ApartmentClassController {
 
     @PutMapping
     public ResponseEntity update(@RequestBody @Valid ApartmentClass apartmentClass) {
-        logger.info(String.format(CustomEntityMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartmentClass.getId()));
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartmentClass.getId()));
 
         return new ResponseEntity(apartmentClassService.update(apartmentClass), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") final Long id) {
-        logger.info(String.format(CustomEntityMessage.REQUEST_FOR_DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
 
         apartmentClassService.deleteById(id);
 
