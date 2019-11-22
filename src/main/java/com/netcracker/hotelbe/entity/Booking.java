@@ -1,20 +1,17 @@
 package com.netcracker.hotelbe.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.netcracker.hotelbe.entity.enums.BookingStatus;
 import com.netcracker.hotelbe.utils.PostgreSQLEnumType;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Data
 @Entity

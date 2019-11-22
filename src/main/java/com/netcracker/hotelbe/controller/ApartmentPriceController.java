@@ -2,7 +2,8 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.ApartmentPrice;
 import com.netcracker.hotelbe.service.ApartmentPriceService;
-import com.netcracker.hotelbe.utils.SimpleLogger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("apartment-price")
 public class ApartmentPriceController {
-    private SimpleLogger logger = new SimpleLogger(ApartmentPriceController.class);
+    private static Logger logger = LogManager.getLogger(ApartmentPriceController.class);
     private final static String APARTMENT_PRICE_BY_ID_NOT_FOUND = "Apartment price by id: %d not found!";
 
 
@@ -30,8 +31,12 @@ public class ApartmentPriceController {
                                  @PathVariable Long apartmentId) {
         logger.info("Request for create apartment price with apartmentId: " + apartmentId);
 
-        return new ResponseEntity(apartmentPriceService.save(apartmentPrice, apartmentId),
-                HttpStatus.CREATED);
+        final long id = apartmentPriceService.save(apartmentPrice, apartmentId);
+        if (id > 0) {
+            return new ResponseEntity(id, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("{id}")
