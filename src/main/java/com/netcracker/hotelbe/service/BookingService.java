@@ -64,7 +64,7 @@ public class BookingService {
         }
         update.setId(booking.getId());
         update.setBookingStatus(booking.getBookingStatus());
-        update.setComments(booking.getComments());
+        update.setComment(booking.getComment());
         update.setCreatedDate(booking.getCreatedDate());
         update.setStartDate(booking.getStartDate());
         update.setEndDate(booking.getEndDate());
