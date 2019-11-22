@@ -1,11 +1,14 @@
 package com.netcracker.hotelbe.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -24,13 +27,13 @@ public class ApartmentPrice implements Serializable {
     @Column(name = "price")
     private int price;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "start_period")
-    private Date startPeriod;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp startPeriod;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "end_period")
-    private Date endPeriod;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp endPeriod;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "apartment_id")

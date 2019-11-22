@@ -2,7 +2,8 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.UnavailableApartment;
 import com.netcracker.hotelbe.service.UnavailableApartmentService;
-import com.netcracker.hotelbe.utils.SimpleLogger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("unavailable-apartment")
 public class UnavailableApartmentController {
-    private SimpleLogger logger = new SimpleLogger(UnavailableApartmentController.class);
+    private static Logger logger = LogManager.getLogger(UnavailableApartmentController.class);
     private final static String UNAVAILABLE_APARTMENT_BY_ID_NOT_FOUND = "Unavailable apartment by id: %d not found!";
 
 
