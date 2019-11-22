@@ -1,6 +1,8 @@
 package com.netcracker.hotelbe.controller;
 
 
+import com.google.common.base.Throwables;
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +28,22 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
-    protected ResponseEntity<Object> handleEntityNotFoundException (EntityNotFoundException ex) {
+    protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {RuntimeException.class})
+    protected ResponseEntity<Object> handlePSQLException(RuntimeException runtimeException) {
+        Throwable rootCause = Throwables.getRootCause(runtimeException);
+        String logMessage;
+        String responseMessage = runtimeException.getMessage();
+        if (rootCause instanceof PSQLException) {
+            logMessage = rootCause.getMessage();
+            responseMessage = logMessage.split("Detail: ")[1];
+            if (logger.isErrorEnabled()) {
+                logger.error(logMessage);
+            }
+        }
+        return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
     }
 }
