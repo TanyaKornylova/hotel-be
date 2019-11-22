@@ -89,5 +89,4 @@ public class BookingService {
         bookingRepository.delete(delete);
         return true;
     }
-
 }

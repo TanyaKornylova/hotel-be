@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.netcracker.hotelbe.entity.enums.ApartmentStatus;
 import com.netcracker.hotelbe.utils.PostgreSQLEnumType;
 import lombok.Data;
-import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -61,6 +60,5 @@ public class Apartment implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
     private List<Booking> bookings;
-
 
 }
