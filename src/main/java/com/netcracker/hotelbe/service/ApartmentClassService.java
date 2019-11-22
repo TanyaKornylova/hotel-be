@@ -2,7 +2,9 @@ package com.netcracker.hotelbe.service;
 
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.repository.ApartmentClassRepository;
-import com.netcracker.hotelbe.utils.SimpleLogger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ApartmentClassService {
-    private SimpleLogger logger = new SimpleLogger(ApartmentClassService.class);
+    private static Logger logger = LogManager.getLogger(ApartmentClassService.class);
 
     @Autowired
     private ApartmentClassRepository apartmentClassRepository;
@@ -42,10 +44,11 @@ public class ApartmentClassService {
 
         try {
             apartmentClass = apartmentClassRepository.findById(id).get();
-            logger.trace("Found apartment class " + apartmentClass.toString());
+            logger.trace("Found apartment class ");
         } catch (NoSuchElementException noSuchElement) {
-            logger.error("Apartment class with id " + id + " not found!", noSuchElement);
-
+            if (logger.isEnabledFor(Priority.ERROR)) {
+                logger.error("Apartment class with id " + id + " not found!", noSuchElement);
+            }
             apartmentClass = null;
         }
 
@@ -71,8 +74,9 @@ public class ApartmentClassService {
 
             result = true;
         } catch (NoSuchElementException noSuchElement) {
-            logger.error("Apartment class with id " + apartmentClass.getId() + " not found!", noSuchElement);
-
+            if (logger.isEnabledFor(Priority.ERROR)) {
+                logger.error("Apartment class with id " + apartmentClass.getId() + " not found!", noSuchElement);
+            }
             result = false;
         }
 
@@ -95,8 +99,9 @@ public class ApartmentClassService {
             result = true;
 
         } catch (NoSuchElementException noSuchElement) {
-            logger.error("Apartment class with id " + id + " not found!", noSuchElement);
-
+            if (logger.isEnabledFor(Priority.ERROR)) {
+                logger.error("Apartment class with id " + id + " not found!", noSuchElement);
+            }
             result = false;
         }
 

@@ -2,7 +2,8 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.service.ApartmentClassService;
-import com.netcracker.hotelbe.utils.SimpleLogger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("apartment-class")
 public class ApartmentClassController {
-    private SimpleLogger logger = new SimpleLogger(ApartmentClassController.class);
+    private static Logger logger = LogManager.getLogger(ApartmentClassController.class);
     private final static String APARTMENT_CLASS_BY_ID_NOT_FOUND = "Apartment class by id: %d not found!";
 
     @Autowired

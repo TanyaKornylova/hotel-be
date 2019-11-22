@@ -25,7 +25,7 @@ public class BookingController {
         return new ResponseEntity(bookingService.getAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/{apartmentClassId} {apartmentId} {userId}")
+    @PostMapping("/{apartmentClassId}/{apartmentId}/{userId}")
     public ResponseEntity create(@RequestBody Booking booking, @PathVariable Long apartmentClassId,
                                  @PathVariable Long apartmentId, @PathVariable Long userId) {
         logger.info("Request for create booking with apartmentClassId: " + apartmentClassId
@@ -49,7 +49,7 @@ public class BookingController {
         }
     }
 
-    @PutMapping("{apartmentClassId} {apartmentId} {userId}")
+    @PutMapping("{apartmentClassId}/{apartmentId}/{userId}")
     public ResponseEntity update(@RequestBody Booking booking, @PathVariable Long apartmentClassId,
                                  @PathVariable Long apartmentId, @PathVariable Long userId) {
         logger.info("Request for update booking by id: " + booking.getId() + " and apartmentClassId: "
