@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("apartment-price")
 public class ApartmentPriceController {
-    private Logger logger = LogManager.getLogger(ApartmentPriceController.class);
+    private static Logger logger = LogManager.getLogger(ApartmentPriceController.class);
     private final static String APARTMENT_PRICE_BY_ID_NOT_FOUND = "Apartment price by id: %d not found!";
 
 

@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class UnavailableApartmentService {
-    private Logger logger = LogManager.getLogger(ApartmentPriceService.class);
+    private static Logger logger = LogManager.getLogger(ApartmentPriceService.class);
 
     @Autowired
     private UnavailableApartmentRepository unavailableApartmentRepository;

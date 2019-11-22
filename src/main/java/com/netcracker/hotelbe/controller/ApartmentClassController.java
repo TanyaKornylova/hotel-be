@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("apartment-class")
 public class ApartmentClassController {
-    private Logger logger = LogManager.getLogger(ApartmentClassController.class);
+    private static Logger logger = LogManager.getLogger(ApartmentClassController.class);
     private final static String APARTMENT_CLASS_BY_ID_NOT_FOUND = "Apartment class by id: %d not found!";
 
     @Autowired

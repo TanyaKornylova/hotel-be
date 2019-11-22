@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("unavailable-apartment")
 public class UnavailableApartmentController {
-    private Logger logger = LogManager.getLogger(UnavailableApartmentController.class);
+    private static Logger logger = LogManager.getLogger(UnavailableApartmentController.class);
     private final static String UNAVAILABLE_APARTMENT_BY_ID_NOT_FOUND = "Unavailable apartment by id: %d not found!";
 
 

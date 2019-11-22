@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ApartmentClassService {
-    private Logger logger = LogManager.getLogger(ApartmentClassService.class);
+    private static Logger logger = LogManager.getLogger(ApartmentClassService.class);
 
     @Autowired
     private ApartmentClassRepository apartmentClassRepository;
