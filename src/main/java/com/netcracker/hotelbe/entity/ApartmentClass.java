@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
@@ -26,9 +27,11 @@ public class ApartmentClass implements Serializable {
     private String nameClass;
 
     @Column(name = "number_of_rooms")
+    @Min(value = 1, message = "Number of rooms cant be less then 1")
     private int numberOfRooms;
 
     @Column(name = "number_of_couchette")
+    @Min(value = 1, message = "Number of couchette cant be less then 1")
     private int numberOfCouchette;
 
     @JsonIgnore

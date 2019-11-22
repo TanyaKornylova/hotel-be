@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("apartment")
 public class ApartmentController {
@@ -25,59 +27,35 @@ public class ApartmentController {
         return new ResponseEntity(apartmentService.getAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/{apartmentClassId}")
-    public ResponseEntity create(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
-        logger.info("Request for create apartment with apartmentClassId: " + apartmentClassId);
-
-        final long id = apartmentService.save(apartment, apartmentClassId);
-        if (id > 0) {
-            return new ResponseEntity(id, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity getById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity getById(@PathVariable("id") Long id) {
         logger.info("Request for get apartment by id: " + id);
 
-        final Apartment apartment = apartmentService.findById(id);
-        if (apartment != null) {
-            return new ResponseEntity(apartment, HttpStatus.OK);
-        } else {
-            logger.warn(String.format(APARTMENT_BY_ID_NOT_FOUND, id));
-
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(apartmentService.findById(id), HttpStatus.OK);
     }
 
-    @PutMapping("{apartmentClassId}")
-    public ResponseEntity update(@RequestBody Apartment apartment, @PathVariable Long apartmentClassId) {
+    @PostMapping("/{apartmentClassId}")
+    public ResponseEntity create(@RequestBody @Valid Apartment apartment, @PathVariable("apartmentClassId") Long apartmentClassId) {
+        logger.info("Request for create apartment with apartmentClassId: " + apartmentClassId);
+
+        return new ResponseEntity(apartmentService.save(apartment, apartmentClassId), HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("/{apartmentClassId}")
+    public ResponseEntity update(@RequestBody @Valid Apartment apartment, @PathVariable("apartmentClassId") Long apartmentClassId) {
         logger.info("Request for update apartment by id: " + apartment.getId() + " and apartmentClassId: " + apartmentClassId);
 
-        final boolean update = apartmentService.update(apartment, apartmentClassId);
-
-        if (update) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.warn("Apartment by id: " + apartment.getId() + " and apartmentClassId: " + apartmentClassId + " not found!");
-
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(apartmentService.update(apartment, apartmentClassId), HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity deleteById(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteById(@PathVariable("id") Long id) {
         logger.info("Request for delete apartment by id: " + id);
 
-        final boolean delete = apartmentService.deleteById(id);
-        if (delete) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.warn(String.format(APARTMENT_BY_ID_NOT_FOUND, id));
+        apartmentService.deleteById(id);
 
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }

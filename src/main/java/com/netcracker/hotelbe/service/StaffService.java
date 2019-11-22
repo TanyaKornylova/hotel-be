@@ -16,7 +16,7 @@ public class StaffService {
 
     public Staff findById(long id){
         return staffRepository.findById(id).orElseThrow(
-                ()->new EntityNotFoundException("No entity with id=" + id + " found")
+                ()->new EntityNotFoundException(String.valueOf(id))
         );
     }
 
@@ -30,7 +30,7 @@ public class StaffService {
 
     public void deleteById(Long id){
         if (!staffRepository.findById(id).isPresent()){
-            throw new EntityNotFoundException("No entity with id=" + id + " found");
+            throw new EntityNotFoundException(String.valueOf(id));
         }
         staffRepository.setStatusById(false, id);
     }

@@ -11,6 +11,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "Apartments",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "room_number"})})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @TypeDef(
         name = "pgsql_enum",

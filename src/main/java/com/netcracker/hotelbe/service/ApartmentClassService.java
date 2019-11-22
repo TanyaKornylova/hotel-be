@@ -6,8 +6,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,7 +20,8 @@ public class ApartmentClassService {
     @Autowired
     private ApartmentClassRepository apartmentClassRepository;
 
-    public List<ApartmentClass> getAll() {
+
+    public List<ApartmentClass> findAll() {
         logger.trace("Find all ApartmentClass");
 
         final List<ApartmentClass> apartmentClasses = apartmentClassRepository.findAll();
@@ -37,75 +40,43 @@ public class ApartmentClassService {
         return id;
     }
 
-    public ApartmentClass findById(Long id) {
-        logger.trace("Find apartment class by id " + id);
+    public ApartmentClass findById(final Long id) {
+        logger.trace("Find ApartmentClass by id " + id);
 
-        ApartmentClass apartmentClass;
-
-        try {
-            apartmentClass = apartmentClassRepository.findById(id).get();
-            logger.trace("Found apartment class ");
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Apartment class with id " + id + " not found!", noSuchElement);
-            }
-            apartmentClass = null;
-        }
-
-        return apartmentClass;
+        return apartmentClassRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
     }
 
-    public boolean update(ApartmentClass apartmentClass) {
+    public Long update(ApartmentClass apartmentClass) {
         logger.trace("Update apartment class");
+        final Long apartmentClassId = apartmentClass.getId();
 
-        ApartmentClass update;
-        boolean result;
+        ApartmentClass update = apartmentClassRepository.findById(apartmentClassId).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(apartmentClassId))
+        );
+        logger.trace("Found apartment class with id = " + apartmentClassId);
 
-        try {
-            update = apartmentClassRepository.findById(apartmentClass.getId()).get();
-            logger.trace("Found apartment class");
+        update.setNameClass(apartmentClass.getNameClass());
+        update.setNumberOfRooms(apartmentClass.getNumberOfRooms());
+        update.setNumberOfCouchette(apartmentClass.getNumberOfCouchette());
 
-            update.setId(apartmentClass.getId());
-            update.setNameClass(apartmentClass.getNameClass());
-            update.setNumberOfRooms(apartmentClass.getNumberOfRooms());
-            update.setNumberOfCouchette(apartmentClass.getNumberOfCouchette());
-            apartmentClassRepository.save(update);
-            logger.trace("Updated apartment class is saved");
+        update = apartmentClassRepository.save(update);
+        logger.trace("Updated apartment class is saved");
 
-            result = true;
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Apartment class with id " + apartmentClass.getId() + " not found!", noSuchElement);
-            }
-            result = false;
-        }
-
-        return result;
+        return update.getId();
     }
 
-    public boolean deleteById(Long id) {
+    public void deleteById(final Long id) {
         logger.trace("Delete apartment class by id " + id);
 
-        ApartmentClass delete;
-        boolean result;
+        ApartmentClass delete = apartmentClassRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
+        logger.trace("Found apartment class for delete");
 
-        try {
-            delete = apartmentClassRepository.findById(id).get();
-            logger.trace("Found apartment class for delete");
-
-            apartmentClassRepository.delete(delete);
-            logger.trace("Apartment class deleted");
-
-            result = true;
-
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Apartment class with id " + id + " not found!", noSuchElement);
-            }
-            result = false;
-        }
-
-        return result;
+        apartmentClassRepository.delete(delete);
+        logger.trace("Apartment class deleted");
     }
 
 }
