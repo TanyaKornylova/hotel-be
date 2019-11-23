@@ -3,18 +3,19 @@ package com.netcracker.hotelbe.service;
 import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.entity.UnavailableApartment;
 import com.netcracker.hotelbe.repository.UnavailableApartmentRepository;
+import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UnavailableApartmentService {
     private static Logger logger = LogManager.getLogger(ApartmentPriceService.class);
+    private final static String ENTITY_NAME = UnavailableApartment.class.getSimpleName();
 
     @Autowired
     private UnavailableApartmentRepository unavailableApartmentRepository;
@@ -23,109 +24,66 @@ public class UnavailableApartmentService {
     private ApartmentService apartmentService;
 
     public List<UnavailableApartment> getAll() {
-        logger.trace("Find all Unavailable Apartment");
+        logger.trace(String.format(CustomEntityLogMessage.FIND_ALL_ENTITY, ENTITY_NAME));
 
         final List<UnavailableApartment> unavailableApartments = unavailableApartmentRepository.findAll();
-        logger.info("Found " + unavailableApartments.size() + " elements");
+        logger.info(String.format(CustomEntityLogMessage.FOUND_AMOUNT_ELEMENT, unavailableApartments.size()));
 
         return unavailableApartments;
     }
 
-    public Long save(UnavailableApartment unavailableApartment, Long apartmentId) {
-        logger.trace("Save UnavailableApartment");
+    public Long save(UnavailableApartment unavailableApartment, final Long apartmentId) {
+        logger.trace(String.format(CustomEntityLogMessage.SAVE_ENTITY, ENTITY_NAME));
 
         final Apartment apartment = apartmentService.findById(apartmentId);
-        long id;
-        if (apartment != null) {
-            unavailableApartment.setApartment(apartment);
-            final UnavailableApartment save = unavailableApartmentRepository.save(unavailableApartment);
+        unavailableApartment.setApartment(apartment);
 
-            id = save.getId();
-            logger.trace("Save apartment with id " + id);
-        } else {
-            id = 1;
-        }
+        final UnavailableApartment save = unavailableApartmentRepository.save(unavailableApartment);
+        final Long id = save.getId();
+        logger.trace(String.format(CustomEntityLogMessage.SAVE_ENTITY_WITH_ID, ENTITY_NAME, id));
+
         return id;
     }
 
-    public UnavailableApartment findById(Long id) {
-        logger.trace("Find unavailable apartment by id " + id);
+    public UnavailableApartment findById(final Long id) {
+        logger.trace(String.format(CustomEntityLogMessage.FIND_ENTITY_BY_ID, ENTITY_NAME, id));
 
-        UnavailableApartment unavailableApartment;
-
-        try {
-            unavailableApartment = unavailableApartmentRepository.findById(id).get();
-            logger.trace("Found unavailable apartment");
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Unavailable Apartment with id " + id + " not found!", noSuchElement);
-            }
-            unavailableApartment = null;
-        }
-
-        return unavailableApartment;
+        return unavailableApartmentRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
     }
 
-    public boolean update(UnavailableApartment unavailableApartment, Long apartmentId) {
-        logger.trace("Update UnavailableApartment");
+    public Long update(final UnavailableApartment unavailableApartment, final Long apartmentId) {
+        logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
+        final Long unavailableApartmentId = unavailableApartment.getId();
 
-        UnavailableApartment update;
-        Apartment apartment;
-        boolean result;
+        final Apartment apartment = apartmentService.findById(apartmentId);
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
 
-        try {
-            update = unavailableApartmentRepository.findById(unavailableApartment.getId()).get();
-            logger.trace("Found UnavailableApartment");
+        UnavailableApartment update = unavailableApartmentRepository.findById(unavailableApartmentId).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(apartmentId))
+        );
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
 
-            apartment = apartmentService.findById(apartmentId);
+        update.setStartDate(unavailableApartment.getStartDate());
+        update.setEndDate(unavailableApartment.getEndDate());
+        update.setCauseDescription(unavailableApartment.getCauseDescription());
+        update.setApartment(apartment);
+        update = unavailableApartmentRepository.save(update);
+        logger.trace(String.format(CustomEntityLogMessage.UPDATED_ENTITY_SAVED, ENTITY_NAME));
 
-            if (apartment != null) {
-                if (logger.isTraceEnabled()) {
-                    logger.trace("Found apartment");
-                }
-                update.setId(unavailableApartment.getId());
-                update.setStartDate(unavailableApartment.getStartDate());
-                update.setEndDate(unavailableApartment.getEndDate());
-                update.setCauseDescription(unavailableApartment.getCauseDescription());
-                update.setApartment(apartment);
-                unavailableApartmentRepository.save(update);
-                logger.trace("Updated UnavailableApartment is saved");
-
-                result = true;
-            } else {
-                result = false;
-            }
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("Apartment with id " + unavailableApartment.getId() + " not found!", noSuchElement);
-            }
-            result = false;
-        }
-
-        return result;
+        return update.getId();
     }
 
-    public boolean deleteById(Long id) {
-        logger.trace("Delete UnavailableApartment by id " + id);
+    public void deleteById(final Long id) {
+        logger.trace(String.format(CustomEntityLogMessage.DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
 
-        UnavailableApartment delete;
-        boolean result;
+        final UnavailableApartment delete = unavailableApartmentRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_FOR_DELETE, ENTITY_NAME));
 
-        try {
-            delete = unavailableApartmentRepository.findById(id).get();
-            logger.trace("Found UnavailableApartment for delete");
-
-            unavailableApartmentRepository.delete(delete);
-            logger.trace("UnavailableApartment deleted");
-
-            result = true;
-        } catch (NoSuchElementException noSuchElement) {
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error("UnavailableApartment with id " + id + " not found!", noSuchElement);
-            }
-            result = false;
-        }
-
-        return result;
+        unavailableApartmentRepository.delete(delete);
+        logger.trace(String.format(CustomEntityLogMessage.ENTITY_DELETED, ENTITY_NAME));
     }
 }

@@ -2,11 +2,9 @@ package com.netcracker.hotelbe.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.netcracker.hotelbe.entity.enums.ApartmentStatus;
 import com.netcracker.hotelbe.utils.PostgreSQLEnumType;
 import lombok.Data;
-import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -18,7 +16,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "Apartments",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "room_number"})})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @TypeDef(
         name = "pgsql_enum",
@@ -61,6 +59,5 @@ public class Apartment implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
     private List<Booking> bookings;
-
 
 }
