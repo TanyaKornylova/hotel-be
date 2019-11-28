@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("booking")
@@ -25,13 +27,11 @@ public class BookingController {
         return new ResponseEntity(bookingService.getAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/{apartmentClassId}/{apartmentId}/{userId}")
-    public ResponseEntity create(@RequestBody Booking booking, @PathVariable Long apartmentClassId,
-                                 @PathVariable Long apartmentId, @PathVariable Long userId) {
-        logger.info("Request for create booking with apartmentClassId: " + apartmentClassId
-                + ", apartmentId: " + apartmentId + ", userId: " + userId);
+    @PostMapping
+    public ResponseEntity create(@RequestBody @Valid Booking booking) {
+        logger.info("Request for create booking");
 
-        return new ResponseEntity(bookingService.save(booking, apartmentClassId, apartmentId, userId),
+        return new ResponseEntity(bookingService.save(booking),
                 HttpStatus.CREATED);
     }
 
@@ -49,19 +49,16 @@ public class BookingController {
         }
     }
 
-    @PutMapping("{apartmentClassId}/{apartmentId}/{userId}")
-    public ResponseEntity update(@RequestBody Booking booking, @PathVariable Long apartmentClassId,
-                                 @PathVariable Long apartmentId, @PathVariable Long userId) {
-        logger.info("Request for update booking by id: " + booking.getId() + " and apartmentClassId: "
-                + apartmentClassId + ", apartmentId: " + apartmentId + ", userId: " + userId);
+    @PutMapping
+    public ResponseEntity update(@RequestBody @Valid Booking booking) {
+        logger.info("Request for update booking by id: " + booking.getId());
 
-        boolean update = bookingService.update(booking, apartmentClassId, apartmentId, userId);
+        Long update = bookingService.update(booking);
 
-        if (update) {
+        if (update != 0) {
             return new ResponseEntity(HttpStatus.OK);
         } else {
-            logger.warn("Booking by id: " + booking.getId() + " and apartmentClassId: "
-                    + apartmentClassId + ", apartmentId: " + apartmentId + ", userId: " + userId + " not found!");
+            logger.warn("Booking by id: " + booking.getId());
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
