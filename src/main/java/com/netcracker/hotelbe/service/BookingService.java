@@ -24,14 +24,6 @@ public class BookingService {
     @Autowired
     BookingRepository bookingRepository;
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    ApartmentClassService apartmentClassService;
-
-    @Autowired
-    ApartmentService apartmentService;
 
     public List<Booking> getAll() {
         return bookingRepository.findAll();
