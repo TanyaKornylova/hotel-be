@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "Bookings",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @TypeDef(
         name = "pgsql_enum",
         typeClass = PostgreSQLEnumType.class
@@ -55,15 +54,15 @@ public class Booking implements Serializable {
     @Type( type = "pgsql_enum" )
     private BookingStatus bookingStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="apartmentclass_id")
     private ApartmentClass apartmentClass;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="apartment_id")
     private Apartment apartment;
 }
