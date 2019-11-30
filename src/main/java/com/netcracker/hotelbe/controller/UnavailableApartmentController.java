@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/unavailableApartments")
 public class UnavailableApartmentController {
@@ -20,21 +22,21 @@ public class UnavailableApartmentController {
     private UnavailableApartmentService unavailableApartmentService;
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<UnavailableApartment>> getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(unavailableApartmentService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>(unavailableApartmentService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable("id") final Long id) {
+    public ResponseEntity<UnavailableApartment> getById(@PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ENTITY_BY_ID, ENTITY_NAME, id));
 
         return new ResponseEntity(unavailableApartmentService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody UnavailableApartment unavailableApartment) {
+    public ResponseEntity<Long> create(@RequestBody UnavailableApartment unavailableApartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
         return new ResponseEntity<>(unavailableApartmentService.save(unavailableApartment), HttpStatus.CREATED);
@@ -42,7 +44,7 @@ public class UnavailableApartmentController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@RequestBody UnavailableApartment unavailableApartment, @PathVariable("id") final Long id) {
+    public ResponseEntity<Long> update(@RequestBody UnavailableApartment unavailableApartment, @PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, unavailableApartment.getId()));
 
         return new ResponseEntity<>(unavailableApartmentService.update(unavailableApartment, id), HttpStatus.OK);

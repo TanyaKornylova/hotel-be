@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/apartments")
@@ -22,28 +23,28 @@ public class ApartmentController {
     private ApartmentService apartmentService;
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<Apartment>> getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
         return new ResponseEntity<>(apartmentService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable("id") final Long id) {
+    public ResponseEntity<Apartment> getById(@PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ENTITY_BY_ID, ENTITY_NAME, id));
 
         return new ResponseEntity<>(apartmentService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid Apartment apartment) {
+    public ResponseEntity<Long> create(@RequestBody @Valid Apartment apartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
         return new ResponseEntity<>(apartmentService.save(apartment), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}}")
-    public ResponseEntity update(@RequestBody @Valid Apartment apartment, @PathVariable("id") Long id) {
+    public ResponseEntity<Long> update(@RequestBody @Valid Apartment apartment, @PathVariable("id") Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartment.getId()));
 
         return new ResponseEntity<>(apartmentService.update(apartment, id), HttpStatus.OK);
