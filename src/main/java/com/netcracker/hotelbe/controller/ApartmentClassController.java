@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/apartment-class")
+@RequestMapping("/apartmentsClasses")
 public class ApartmentClassController {
     private static Logger logger = LogManager.getLogger(ApartmentClassController.class);
     private final static String ENTITY_NAME = ApartmentClass.class.getSimpleName();
@@ -44,11 +44,11 @@ public class ApartmentClassController {
                 HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody @Valid ApartmentClass apartmentClass) {
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody @Valid ApartmentClass apartmentClass, @PathVariable Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartmentClass.getId()));
 
-        return new ResponseEntity<>(apartmentClassService.update(apartmentClass), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentClassService.update(apartmentClass, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

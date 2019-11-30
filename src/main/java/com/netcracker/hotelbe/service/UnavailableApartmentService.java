@@ -53,15 +53,14 @@ public class UnavailableApartmentService {
         );
     }
 
-    public Long update(final UnavailableApartment unavailableApartment) {
+    public Long update(final UnavailableApartment unavailableApartment, final Long id) {
         logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
-        final Long unavailableApartmentId = unavailableApartment.getId();
 
         final Apartment apartment = apartmentService.findById(unavailableApartment.getApartment().getId());
         logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, unavailableApartment.getApartment().getId()));
 
-        UnavailableApartment update = unavailableApartmentRepository.findById(unavailableApartmentId).orElseThrow(
-                () -> new EntityNotFoundException(String.valueOf(unavailableApartment.getApartment().getId()))
+        UnavailableApartment update = unavailableApartmentRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
         );
         logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, unavailableApartment.getApartment().getId()));
 

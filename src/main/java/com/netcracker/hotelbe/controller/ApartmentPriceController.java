@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/apartment-price")
+@RequestMapping("/apartmentPrices")
 public class ApartmentPriceController {
     private static Logger logger = LogManager.getLogger(ApartmentPriceController.class);
     private final static String ENTITY_NAME = ApartmentPrice.class.getSimpleName();
@@ -23,14 +23,14 @@ public class ApartmentPriceController {
     public ResponseEntity getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(apartmentPriceService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentPriceService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ENTITY_BY_ID, ENTITY_NAME, id));
 
-        return new ResponseEntity(apartmentPriceService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentPriceService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
@@ -40,11 +40,11 @@ public class ApartmentPriceController {
         return new ResponseEntity<>(apartmentPriceService.save(apartmentPrice), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody ApartmentPrice apartmentPrice) {
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody ApartmentPrice apartmentPrice, @PathVariable("id") Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartmentPrice.getId()));
 
-        return new ResponseEntity<>(apartmentPriceService.update(apartmentPrice), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentPriceService.update(apartmentPrice, id), HttpStatus.OK);
 
     }
 

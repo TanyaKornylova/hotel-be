@@ -53,16 +53,15 @@ public class ApartmentPriceService {
         );
     }
 
-    public Long update(final ApartmentPrice apartmentPrice) {
+    public Long update(final ApartmentPrice apartmentPrice, final Long id) {
         logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
-        final Long apartmentPriceId = apartmentPrice.getId();
 
         final ApartmentClass apartmentClass = apartmentClassService.findById(apartmentPrice.getApartmentClass().getId());
         logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentPrice.getApartmentClass().getId()));
 
 
-        ApartmentPrice update = apartmentPriceRepository.findById(apartmentPrice.getId()).orElseThrow(
-                () -> new EntityNotFoundException(String.valueOf(apartmentPriceId))
+        ApartmentPrice update = apartmentPriceRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
         );
         logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentPrice.getApartmentClass().getId()));
 

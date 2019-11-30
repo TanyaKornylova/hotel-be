@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unavailable-apartment")
+@RequestMapping("/unavailableApartments")
 public class UnavailableApartmentController {
     private static Logger logger = LogManager.getLogger(UnavailableApartmentController.class);
     private final static String ENTITY_NAME = UnavailableApartment.class.getSimpleName();
@@ -41,11 +41,11 @@ public class UnavailableApartmentController {
     }
 
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody UnavailableApartment unavailableApartment) {
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody UnavailableApartment unavailableApartment, @PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, unavailableApartment.getId()));
 
-        return new ResponseEntity<>(unavailableApartmentService.update(unavailableApartment), HttpStatus.OK);
+        return new ResponseEntity<>(unavailableApartmentService.update(unavailableApartment, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

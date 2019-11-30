@@ -42,11 +42,11 @@ public class ApartmentController {
         return new ResponseEntity<>(apartmentService.save(apartment), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody @Valid Apartment apartment) {
+    @PutMapping("/{id}}")
+    public ResponseEntity update(@RequestBody @Valid Apartment apartment, @PathVariable("id") Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartment.getId()));
 
-        return new ResponseEntity<>(apartmentService.update(apartment), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentService.update(apartment, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
