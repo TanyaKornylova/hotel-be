@@ -37,7 +37,7 @@ public class UnavailableApartmentController {
     public ResponseEntity create(@RequestBody UnavailableApartment unavailableApartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(unavailableApartmentService.save(unavailableApartment), HttpStatus.CREATED);
+        return new ResponseEntity<>(unavailableApartmentService.save(unavailableApartment), HttpStatus.CREATED);
     }
 
 
@@ -45,7 +45,7 @@ public class UnavailableApartmentController {
     public ResponseEntity update(@RequestBody UnavailableApartment unavailableApartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, unavailableApartment.getId()));
 
-        return new ResponseEntity(unavailableApartmentService.update(unavailableApartment), HttpStatus.OK);
+        return new ResponseEntity<>(unavailableApartmentService.update(unavailableApartment), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

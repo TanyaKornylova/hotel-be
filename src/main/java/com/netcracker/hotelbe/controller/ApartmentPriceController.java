@@ -37,14 +37,14 @@ public class ApartmentPriceController {
     public ResponseEntity create(@RequestBody ApartmentPrice apartmentPrice) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(apartmentPriceService.save(apartmentPrice), HttpStatus.CREATED);
+        return new ResponseEntity<>(apartmentPriceService.save(apartmentPrice), HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity update(@RequestBody ApartmentPrice apartmentPrice) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartmentPrice.getId()));
 
-        return new ResponseEntity(apartmentPriceService.update(apartmentPrice), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentPriceService.update(apartmentPrice), HttpStatus.OK);
 
     }
 
