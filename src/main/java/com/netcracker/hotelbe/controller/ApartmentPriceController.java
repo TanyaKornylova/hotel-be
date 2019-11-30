@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("apartment-price")
+@RequestMapping("/apartmentPrices")
 public class ApartmentPriceController {
     private static Logger logger = LogManager.getLogger(ApartmentPriceController.class);
     private final static String ENTITY_NAME = ApartmentPrice.class.getSimpleName();
@@ -19,36 +21,36 @@ public class ApartmentPriceController {
     @Autowired
     private ApartmentPriceService apartmentPriceService;
 
-    @GetMapping("/all")
-    public ResponseEntity getAll() {
+    @GetMapping
+    public ResponseEntity<List<ApartmentPrice>> getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(apartmentPriceService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentPriceService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable("id") final Long id) {
+    public ResponseEntity<ApartmentPrice> getById(@PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ENTITY_BY_ID, ENTITY_NAME, id));
 
-        return new ResponseEntity(apartmentPriceService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentPriceService.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/{apartmentId}")
-    public ResponseEntity create(@RequestBody ApartmentPrice apartmentPrice, @PathVariable("apartmentId") final Long apartmentId) {
+    @PostMapping
+    public ResponseEntity<Long> create(@RequestBody ApartmentPrice apartmentPrice) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(apartmentPriceService.save(apartmentPrice, apartmentId), HttpStatus.CREATED);
+        return new ResponseEntity<>(apartmentPriceService.save(apartmentPrice), HttpStatus.CREATED);
     }
 
-    @PutMapping("{apartmentId}")
-    public ResponseEntity update(@RequestBody ApartmentPrice apartmentPrice, @PathVariable("apartmentId") final Long apartmentId) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Long> update(@RequestBody ApartmentPrice apartmentPrice, @PathVariable("id") Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartmentPrice.getId()));
 
-        return new ResponseEntity(apartmentPriceService.update(apartmentPrice, apartmentId), HttpStatus.OK);
+        return new ResponseEntity<>(apartmentPriceService.update(apartmentPrice, id), HttpStatus.OK);
 
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
 

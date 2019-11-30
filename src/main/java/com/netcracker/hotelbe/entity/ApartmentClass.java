@@ -40,5 +40,9 @@ public class ApartmentClass implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
+    private List<ApartmentPrice> apartmentPrices;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
     private List<Booking> bookings;
 }

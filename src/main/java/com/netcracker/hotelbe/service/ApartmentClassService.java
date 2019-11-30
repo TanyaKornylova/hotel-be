@@ -47,15 +47,13 @@ public class ApartmentClassService {
         );
     }
 
-    public Long update(final ApartmentClass apartmentClass) {
+    public Long update(final ApartmentClass apartmentClass, final Long id) {
         logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
 
-        final Long apartmentClassId = apartmentClass.getId();
-
-        ApartmentClass update = apartmentClassRepository.findById(apartmentClassId).orElseThrow(
-                () -> new EntityNotFoundException(String.valueOf(apartmentClassId))
+        ApartmentClass update = apartmentClassRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
         );
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentClassId));
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, id));
 
         update.setNameClass(apartmentClass.getNameClass());
         update.setNumberOfRooms(apartmentClass.getNumberOfRooms());

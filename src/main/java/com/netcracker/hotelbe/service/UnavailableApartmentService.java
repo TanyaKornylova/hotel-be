@@ -32,10 +32,10 @@ public class UnavailableApartmentService {
         return unavailableApartments;
     }
 
-    public Long save(UnavailableApartment unavailableApartment, final Long apartmentId) {
+    public Long save(UnavailableApartment unavailableApartment) {
         logger.trace(String.format(CustomEntityLogMessage.SAVE_ENTITY, ENTITY_NAME));
 
-        final Apartment apartment = apartmentService.findById(apartmentId);
+        final Apartment apartment = apartmentService.findById(unavailableApartment.getApartment().getId());
         unavailableApartment.setApartment(apartment);
 
         final UnavailableApartment save = unavailableApartmentRepository.save(unavailableApartment);
@@ -53,17 +53,16 @@ public class UnavailableApartmentService {
         );
     }
 
-    public Long update(final UnavailableApartment unavailableApartment, final Long apartmentId) {
+    public Long update(final UnavailableApartment unavailableApartment, final Long id) {
         logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
-        final Long unavailableApartmentId = unavailableApartment.getId();
 
-        final Apartment apartment = apartmentService.findById(apartmentId);
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
+        final Apartment apartment = apartmentService.findById(unavailableApartment.getApartment().getId());
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, unavailableApartment.getApartment().getId()));
 
-        UnavailableApartment update = unavailableApartmentRepository.findById(unavailableApartmentId).orElseThrow(
-                () -> new EntityNotFoundException(String.valueOf(apartmentId))
+        UnavailableApartment update = unavailableApartmentRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
         );
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, unavailableApartment.getApartment().getId()));
 
         update.setStartDate(unavailableApartment.getStartDate());
         update.setEndDate(unavailableApartment.getEndDate());
