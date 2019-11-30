@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("apartment-price")
+@RequestMapping("/apartment-price")
 public class ApartmentPriceController {
     private static Logger logger = LogManager.getLogger(ApartmentPriceController.class);
     private final static String ENTITY_NAME = ApartmentPrice.class.getSimpleName();
@@ -19,7 +19,7 @@ public class ApartmentPriceController {
     @Autowired
     private ApartmentPriceService apartmentPriceService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
@@ -33,22 +33,22 @@ public class ApartmentPriceController {
         return new ResponseEntity(apartmentPriceService.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/{apartmentId}")
-    public ResponseEntity create(@RequestBody ApartmentPrice apartmentPrice, @PathVariable("apartmentId") final Long apartmentId) {
+    @PostMapping
+    public ResponseEntity create(@RequestBody ApartmentPrice apartmentPrice) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(apartmentPriceService.save(apartmentPrice, apartmentId), HttpStatus.CREATED);
+        return new ResponseEntity(apartmentPriceService.save(apartmentPrice), HttpStatus.CREATED);
     }
 
-    @PutMapping("{apartmentId}")
-    public ResponseEntity update(@RequestBody ApartmentPrice apartmentPrice, @PathVariable("apartmentId") final Long apartmentId) {
+    @PutMapping
+    public ResponseEntity update(@RequestBody ApartmentPrice apartmentPrice) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartmentPrice.getId()));
 
-        return new ResponseEntity(apartmentPriceService.update(apartmentPrice, apartmentId), HttpStatus.OK);
+        return new ResponseEntity(apartmentPriceService.update(apartmentPrice), HttpStatus.OK);
 
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") final Long id) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
 

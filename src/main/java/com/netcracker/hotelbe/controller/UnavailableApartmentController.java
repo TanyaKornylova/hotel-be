@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("unavailable-apartment")
+@RequestMapping("/unavailable-apartment")
 public class UnavailableApartmentController {
     private static Logger logger = LogManager.getLogger(UnavailableApartmentController.class);
     private final static String ENTITY_NAME = UnavailableApartment.class.getSimpleName();
@@ -19,7 +19,7 @@ public class UnavailableApartmentController {
     @Autowired
     private UnavailableApartmentService unavailableApartmentService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
@@ -33,19 +33,19 @@ public class UnavailableApartmentController {
         return new ResponseEntity(unavailableApartmentService.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/{apartmentId}")
-    public ResponseEntity create(@RequestBody UnavailableApartment unavailableApartment, @PathVariable("apartmentId") final Long apartmentId) {
+    @PostMapping
+    public ResponseEntity create(@RequestBody UnavailableApartment unavailableApartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(unavailableApartmentService.save(unavailableApartment, apartmentId), HttpStatus.CREATED);
+        return new ResponseEntity(unavailableApartmentService.save(unavailableApartment), HttpStatus.CREATED);
     }
 
 
-    @PutMapping("/{apartmentId}")
-    public ResponseEntity update(@RequestBody UnavailableApartment unavailableApartment, @PathVariable("apartmentId") final Long apartmentId) {
+    @PutMapping
+    public ResponseEntity update(@RequestBody UnavailableApartment unavailableApartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, unavailableApartment.getId()));
 
-        return new ResponseEntity(unavailableApartmentService.update(unavailableApartment, apartmentId), HttpStatus.OK);
+        return new ResponseEntity(unavailableApartmentService.update(unavailableApartment), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

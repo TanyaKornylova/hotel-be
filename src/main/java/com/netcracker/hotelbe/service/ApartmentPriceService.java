@@ -32,10 +32,10 @@ public class ApartmentPriceService {
         return apartmentPrices;
     }
 
-    public Long save(ApartmentPrice apartmentPrice, final Long apartmentId) {
+    public Long save(ApartmentPrice apartmentPrice) {
         logger.trace(String.format(CustomEntityLogMessage.SAVE_ENTITY, ENTITY_NAME));
 
-        final Apartment apartment = apartmentService.findById(apartmentId);
+        final Apartment apartment = apartmentService.findById(apartmentPrice.getApartment().getId());
         apartmentPrice.setApartment(apartment);
 
         final ApartmentPrice save = apartmentPriceRepository.save(apartmentPrice);
@@ -53,18 +53,18 @@ public class ApartmentPriceService {
         );
     }
 
-    public Long update(final ApartmentPrice apartmentPrice, final Long apartmentId) {
+    public Long update(final ApartmentPrice apartmentPrice) {
         logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
         final Long apartmentPriceId = apartmentPrice.getId();
 
-        final Apartment apartment = apartmentService.findById(apartmentId);
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
+        final Apartment apartment = apartmentService.findById(apartmentPrice.getApartment().getId());
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentPrice.getApartment().getId()));
 
 
         ApartmentPrice update = apartmentPriceRepository.findById(apartmentPrice.getId()).orElseThrow(
                 () -> new EntityNotFoundException(String.valueOf(apartmentPriceId))
         );
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentPrice.getApartment().getId()));
 
         update.setPrice(apartmentPrice.getPrice());
         update.setStartPeriod(apartmentPrice.getStartPeriod());

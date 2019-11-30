@@ -1,5 +1,6 @@
 package com.netcracker.hotelbe.controller;
 
+
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.service.ApartmentClassService;
 import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("apartment-class")
+@RequestMapping("/apartment-class")
 public class ApartmentClassController {
     private static Logger logger = LogManager.getLogger(ApartmentClassController.class);
     private final static String ENTITY_NAME = ApartmentClass.class.getSimpleName();
@@ -21,7 +22,7 @@ public class ApartmentClassController {
     @Autowired
     private ApartmentClassService apartmentClassService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 

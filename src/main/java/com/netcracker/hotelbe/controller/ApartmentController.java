@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("apartment")
+@RequestMapping("/apartments")
 public class ApartmentController {
     private static Logger logger = LogManager.getLogger(ApartmentController.class);
     private final static String ENTITY_NAME = Apartment.class.getSimpleName();
@@ -21,7 +21,7 @@ public class ApartmentController {
     @Autowired
     private ApartmentService apartmentService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity getAll() {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_GET_ALL_ENTITY, ENTITY_NAME));
 
@@ -35,18 +35,18 @@ public class ApartmentController {
         return new ResponseEntity(apartmentService.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/{apartmentClassId}")
-    public ResponseEntity create(@RequestBody @Valid Apartment apartment, @PathVariable("apartmentClassId") final Long apartmentClassId) {
+    @PostMapping
+    public ResponseEntity create(@RequestBody @Valid Apartment apartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_CREATE_ENTITY, ENTITY_NAME));
 
-        return new ResponseEntity(apartmentService.save(apartment, apartmentClassId), HttpStatus.CREATED);
+        return new ResponseEntity(apartmentService.save(apartment), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{apartmentClassId}")
-    public ResponseEntity update(@RequestBody @Valid Apartment apartment, @PathVariable("apartmentClassId") final Long apartmentClassId) {
+    @PutMapping
+    public ResponseEntity update(@RequestBody @Valid Apartment apartment) {
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, apartment.getId()));
 
-        return new ResponseEntity(apartmentService.update(apartment, apartmentClassId), HttpStatus.OK);
+        return new ResponseEntity(apartmentService.update(apartment), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
