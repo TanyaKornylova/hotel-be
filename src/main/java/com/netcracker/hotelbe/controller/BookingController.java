@@ -1,7 +1,9 @@
 package com.netcracker.hotelbe.controller;
 
+import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.entity.Booking;
 import com.netcracker.hotelbe.service.BookingService;
+import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import javax.validation.Valid;
 public class BookingController {
     private final static Logger logger = Logger.getLogger(BookingController.class);
     private final static String BOOKING_BY_ID_NOT_FOUND = "Booking by id: %d not found!";
+    private final static String ENTITY_NAME = Booking.class.getSimpleName();
 
     @Autowired
     BookingService bookingService;
@@ -65,14 +68,8 @@ public class BookingController {
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteById(@PathVariable Long id) {
-        logger.info("Request for delete booking by id: " +id);
-
-        boolean delete = bookingService.deleteById(id);
-        if (delete) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.warn(String.format(BOOKING_BY_ID_NOT_FOUND, id));
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
+        bookingService.deleteById(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

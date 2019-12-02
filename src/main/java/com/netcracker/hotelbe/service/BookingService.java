@@ -74,15 +74,15 @@ public class BookingService {
         return update.getId();
     }
 
-    public boolean deleteById(Long id) {
-        Booking delete;
-        try {
-            delete = bookingRepository.findById(id).get();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+    public void deleteById(Long id) {
+        logger.trace(String.format(CustomEntityLogMessage.DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
+
+        Booking delete = bookingRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_FOR_DELETE, ENTITY_NAME));
 
         bookingRepository.delete(delete);
-        return true;
+        logger.trace(String.format(CustomEntityLogMessage.ENTITY_DELETED, ENTITY_NAME));
     }
 }

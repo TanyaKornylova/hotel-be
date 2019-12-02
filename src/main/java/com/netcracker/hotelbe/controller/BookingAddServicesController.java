@@ -52,13 +52,8 @@ public class BookingAddServicesController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteBookingAddService(@PathVariable Long id){
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_DELETE_ENTITY_BY_ID, ENTITY_NAME, id));
-        Long delete = bookingAddServicesService.deleteById(id);
-        if (delete != 0) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.warn(String.format(BOOKING_ADD_BY_ID_NOT_FOUND, id));
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        bookingAddServicesService.deleteById(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }

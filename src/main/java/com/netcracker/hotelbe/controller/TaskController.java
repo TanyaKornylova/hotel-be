@@ -61,13 +61,10 @@ public class TaskController {
     private ResponseEntity deleteTaskById(@PathVariable Long id){
         logger.info("Request for delete task by id: " +id);
 
-        Long delete = taskService.deleteById(id);
-        if (delete != 0) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.warn(String.format(TASK_BY_ID_NOT_FOUND, id));
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        taskService.deleteById(id);
+
+        return new ResponseEntity(HttpStatus.OK);
+
     }
 
 
