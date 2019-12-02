@@ -37,6 +37,6 @@ public class ApartmentPrice implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "apartment_id")
-    private Apartment apartment;
+    private ApartmentClass apartmentClass;
 
 }

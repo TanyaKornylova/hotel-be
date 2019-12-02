@@ -1,6 +1,6 @@
 package com.netcracker.hotelbe.service;
 
-import com.netcracker.hotelbe.entity.Apartment;
+import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.entity.ApartmentPrice;
 import com.netcracker.hotelbe.repository.ApartmentPriceRepository;
 import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
@@ -21,7 +21,7 @@ public class ApartmentPriceService {
     private ApartmentPriceRepository apartmentPriceRepository;
 
     @Autowired
-    private ApartmentService apartmentService;
+    private ApartmentClassService apartmentClassService;
 
     public List<ApartmentPrice> findAll() {
         logger.trace(String.format(CustomEntityLogMessage.FIND_ALL_ENTITY, ENTITY_NAME));
@@ -32,11 +32,11 @@ public class ApartmentPriceService {
         return apartmentPrices;
     }
 
-    public Long save(ApartmentPrice apartmentPrice, final Long apartmentId) {
+    public Long save(ApartmentPrice apartmentPrice) {
         logger.trace(String.format(CustomEntityLogMessage.SAVE_ENTITY, ENTITY_NAME));
 
-        final Apartment apartment = apartmentService.findById(apartmentId);
-        apartmentPrice.setApartment(apartment);
+        final ApartmentClass apartmentClass = apartmentClassService.findById(apartmentPrice.getApartmentClass().getId());
+        apartmentPrice.setApartmentClass(apartmentClass);
 
         final ApartmentPrice save = apartmentPriceRepository.save(apartmentPrice);
         final Long id = save.getId();
@@ -53,23 +53,22 @@ public class ApartmentPriceService {
         );
     }
 
-    public Long update(final ApartmentPrice apartmentPrice, final Long apartmentId) {
+    public Long update(final ApartmentPrice apartmentPrice, final Long id) {
         logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
-        final Long apartmentPriceId = apartmentPrice.getId();
 
-        final Apartment apartment = apartmentService.findById(apartmentId);
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
+        final ApartmentClass apartmentClass = apartmentClassService.findById(apartmentPrice.getApartmentClass().getId());
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentPrice.getApartmentClass().getId()));
 
 
-        ApartmentPrice update = apartmentPriceRepository.findById(apartmentPrice.getId()).orElseThrow(
-                () -> new EntityNotFoundException(String.valueOf(apartmentPriceId))
+        ApartmentPrice update = apartmentPriceRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
         );
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentId));
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentPrice.getApartmentClass().getId()));
 
         update.setPrice(apartmentPrice.getPrice());
         update.setStartPeriod(apartmentPrice.getStartPeriod());
         update.setEndPeriod(apartmentPrice.getEndPeriod());
-        update.setApartment(apartment);
+        update.setApartmentClass(apartmentClass);
         update = apartmentPriceRepository.save(update);
         logger.trace(String.format(CustomEntityLogMessage.UPDATED_ENTITY_SAVED, ENTITY_NAME));
 
