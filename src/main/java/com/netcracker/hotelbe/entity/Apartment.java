@@ -50,10 +50,6 @@ public class Apartment implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
-    private List<ApartmentPrice> apartmentPrices;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
     private List<UnavailableApartment> unavailableApartments;
 
     @JsonIgnore

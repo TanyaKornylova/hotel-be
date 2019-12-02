@@ -32,10 +32,10 @@ public class ApartmentService {
         return apartments;
     }
 
-    public Long save(Apartment apartment, final Long apartmentClassId) {
+    public Long save(Apartment apartment) {
         logger.trace(String.format(CustomEntityLogMessage.SAVE_ENTITY, ENTITY_NAME));
 
-        final ApartmentClass apartmentClass = apartmentClassService.findById(apartmentClassId);
+        final ApartmentClass apartmentClass = apartmentClassService.findById(apartment.getApartmentClass().getId());
         apartment.setApartmentClass(apartmentClass);
 
         final Apartment save = apartmentRepository.save(apartment);
@@ -53,17 +53,16 @@ public class ApartmentService {
         );
     }
 
-    public Long update(final Apartment apartment, final Long apartmentClassId) {
+    public Long update(final Apartment apartment, final Long id) {
         logger.trace(String.format(CustomEntityLogMessage.UPDATE_ENTITY, ENTITY_NAME));
-        final Long apartmentId = apartment.getId();
 
-        final ApartmentClass apartmentClass = apartmentClassService.findById(apartmentClassId);
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentClassId));
+        final ApartmentClass apartmentClass = apartmentClassService.findById(apartment.getApartmentClass().getId());
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartment.getApartmentClass().getId()));
 
-        Apartment update = apartmentRepository.findById(apartmentId).orElseThrow(
-                () -> new EntityNotFoundException(String.valueOf(apartmentId))
+        Apartment update = apartmentRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
         );
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartmentClassId));
+        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, apartment.getApartmentClass().getId()));
 
         update.setRoomNumber(apartment.getRoomNumber());
         update.setPhoto(apartment.getPhoto());
