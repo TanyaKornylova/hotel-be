@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/unavailableApartments")
+@RequestMapping("unavailableApartments")
 public class UnavailableApartmentController {
     private static Logger logger = LogManager.getLogger(UnavailableApartmentController.class);
     private final static String ENTITY_NAME = UnavailableApartment.class.getSimpleName();

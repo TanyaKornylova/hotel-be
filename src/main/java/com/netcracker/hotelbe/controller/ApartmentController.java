@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/apartments")
+@RequestMapping("apartments")
 public class ApartmentController {
     private static Logger logger = LogManager.getLogger(ApartmentController.class);
     private final static String ENTITY_NAME = Apartment.class.getSimpleName();

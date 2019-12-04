@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("bookings")
 public class BookingController {
     private final static Logger logger = Logger.getLogger(BookingController.class);
     private final static String BOOKING_BY_ID_NOT_FOUND = "Booking by id: %d not found!";
