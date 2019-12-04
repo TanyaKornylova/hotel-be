@@ -51,7 +51,7 @@ public class BookingController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Long> update(@RequestBody @Valid Booking booking) {
         logger.info("Request for update booking by id: " + booking.getId());
 

@@ -43,7 +43,7 @@ public class BookingAddServicesController {
     }
 
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Long> updateBookingAddService(@RequestBody @Valid BookingAddServices bookingAddServices){
         logger.info(String.format(CustomEntityLogMessage.REQUEST_FOR_UPDATE_ENTITY_BY_ID, ENTITY_NAME, bookingAddServices.getId()));
         return new ResponseEntity<>(bookingAddServicesService.save(bookingAddServices).getId(), HttpStatus.OK);
