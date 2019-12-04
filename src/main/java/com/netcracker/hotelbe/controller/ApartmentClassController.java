@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/apartmentsClasses")
+@RequestMapping("apartmentsClasses")
 public class ApartmentClassController {
 
     @Autowired

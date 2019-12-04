@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/apartments")
+@RequestMapping("apartments")
 public class ApartmentController {
 
     @Autowired
