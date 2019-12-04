@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("booking-add-services")
+@RequestMapping("/bookingAddServices")
 public class BookingAddServicesController {
     private static Logger logger = LogManager.getLogger(BookingAddServicesController.class);
     private final static String ENTITY_NAME = BookingAddServices.class.getSimpleName();
