@@ -3,6 +3,7 @@ package com.netcracker.hotelbe.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -35,14 +36,17 @@ public class ApartmentClass implements Serializable {
     private int numberOfCouchette;
 
     @JsonIgnore
+//    @ToString.Exclude
     @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
     private List<Apartment> apartments;
 
     @JsonIgnore
+//    @ToString.Exclude
     @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
     private List<ApartmentPrice> apartmentPrices;
 
     @JsonIgnore
+//    @ToString.Exclude
     @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
     private List<Booking> bookings;
 }

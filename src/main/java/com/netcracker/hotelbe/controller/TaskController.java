@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("task")
+@RequestMapping("tasks")
 public class TaskController {
     private final static Logger logger = Logger.getLogger(TaskController.class);
     private final static String TASK_BY_ID_NOT_FOUND = "Task by id: %d not found!";
