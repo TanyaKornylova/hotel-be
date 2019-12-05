@@ -40,7 +40,6 @@ public class ApartmentController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") final Long id) {
         apartmentService.deleteById(id);
-
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -17,6 +17,7 @@ import java.util.List;
 public class BookingAddServicesService {
     private static Logger logger = LogManager.getLogger(BookingAddServicesService.class);
     private final static String ENTITY_NAME = BookingAddServices.class.getSimpleName();
+
     @Autowired
     private BookingAddServicesRepository bookingAddServicesRepository;
 
@@ -30,8 +31,8 @@ public class BookingAddServicesService {
         return bookingAddServicesRepository.findAll();
     }
 
-    public BookingAddServices save(BookingAddServices staff){
-        return bookingAddServicesRepository.save(staff);
+    public BookingAddServices save(BookingAddServices bookingAddServices){
+        return bookingAddServicesRepository.save(bookingAddServices);
     }
 
     public void deleteById(Long id){
@@ -40,7 +41,6 @@ public class BookingAddServicesService {
         BookingAddServices delete = bookingAddServicesRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.valueOf(id))
         );
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_FOR_DELETE, ENTITY_NAME));
         bookingAddServicesRepository.delete(delete);
 
     }

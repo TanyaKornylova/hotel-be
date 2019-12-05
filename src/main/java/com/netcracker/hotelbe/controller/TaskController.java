@@ -2,7 +2,6 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.Task;
 import com.netcracker.hotelbe.service.TaskService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("tasks")
 public class TaskController {
-    private final static Logger logger = Logger.getLogger(TaskController.class);
-    private final static String TASK_BY_ID_NOT_FOUND = "Task by id: %d not found!";
 
     @Autowired
     private TaskService taskService;
@@ -59,13 +56,8 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     private ResponseEntity deleteTaskById(@PathVariable Long id){
-        logger.info("Request for delete task by id: " +id);
-
         taskService.deleteById(id);
-
         return new ResponseEntity(HttpStatus.OK);
-
     }
-
 
 }
