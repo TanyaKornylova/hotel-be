@@ -56,7 +56,7 @@ CREATE TABLE ApartmentPrices (
    price integer NOT NULL,
    start_period TIMESTAMP NOT NULL,
    end_period TIMESTAMP NOT NULL,
-   apartment_id integer references Apartments(id) NOT NULL
+   apartment_id integer references ApartmentClass(id) NOT NULL
  );
 /*
 --relation many to many for apartments and apartmentItems
@@ -109,7 +109,7 @@ CREATE TABLE Bookings (
 	apartmentClass_id integer references ApartmentClass(id) NOT NULL,
 	apartment_id integer references Apartments(id)
 );
-
+/*
 --many to many for staff and tasks
 CREATE TABLE StaffTaskShip (
 	id serial PRIMARY KEY,
@@ -118,7 +118,7 @@ CREATE TABLE StaffTaskShip (
 	creator_id integer references Staff(user_id) NOT NULL,
 	unique(task_id, executor_id, creator_id)
 );
-
+*/
 --many to many for add services and bookings
 CREATE TABLE BookingAddServicesShip (
 	id serial PRIMARY KEY,

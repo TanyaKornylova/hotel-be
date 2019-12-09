@@ -1,8 +1,13 @@
 package com.netcracker.hotelbe.service;
 
+import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.entity.BookingAddServices;
 import com.netcracker.hotelbe.repository.BookingAddServicesRepository;
+import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -10,6 +15,7 @@ import java.util.List;
 
 @Service
 public class BookingAddServicesService {
+
     @Autowired
     private BookingAddServicesRepository bookingAddServicesRepository;
 
@@ -23,15 +29,15 @@ public class BookingAddServicesService {
         return bookingAddServicesRepository.findAll();
     }
 
-    public BookingAddServices save(BookingAddServices staff){
-        return bookingAddServicesRepository.save(staff);
+    public BookingAddServices save(BookingAddServices bookingAddServices){
+        return bookingAddServicesRepository.save(bookingAddServices);
     }
 
-    public Long deleteById(Long id){
-        if (!bookingAddServicesRepository.findById(id).isPresent()){
-            throw new EntityNotFoundException(String.valueOf(id));
-        }
-        bookingAddServicesRepository.deleteById(id);
-        return id;
+    public void deleteById(Long id){
+        BookingAddServices delete = bookingAddServicesRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
+        bookingAddServicesRepository.delete(delete);
+
     }
 }

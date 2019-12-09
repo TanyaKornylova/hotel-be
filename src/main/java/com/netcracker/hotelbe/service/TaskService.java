@@ -36,17 +36,14 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public Long deleteById(Long id){
+    public void deleteById(Long id){
         if (!taskRepository.findById(id).isPresent()){
             throw new EntityNotFoundException("No entity with id=" + id + " found");
         }
         Task task = taskRepository.findById(id).get();
         final Long taskId = task.getId();
         task.setStatus(TaskStatus.Canceled);
-        task = taskRepository.save(task);
+        taskRepository.save(task);
         logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_WITH_ID, ENTITY_NAME, taskId));
-        return task.getId();
     }
-
-
 }

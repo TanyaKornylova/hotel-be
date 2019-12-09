@@ -50,7 +50,4 @@ public class StaffController {
         staffService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
-
-
-
 }
