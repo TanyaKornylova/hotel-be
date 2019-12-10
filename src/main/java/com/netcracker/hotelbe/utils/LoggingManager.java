@@ -34,7 +34,7 @@ public class LoggingManager {
                     + new ObjectMapper().writeValueAsString(object));
         }
         if (className.contains("com.netcracker.hotelbe.service")) {
-            log.info(className + " : " + methodName + "() " + "Return : "
+            log.trace(className + " : " + methodName + "() " + "Return : "
                     + new ObjectMapper().writeValueAsString(object));
         }
 

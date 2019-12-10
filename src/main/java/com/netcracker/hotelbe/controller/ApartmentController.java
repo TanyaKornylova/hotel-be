@@ -2,6 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.service.ApartmentService;
+import com.netcracker.hotelbe.utils.RuntimeExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,20 @@ public class ApartmentController {
 
     @PostMapping
     public ResponseEntity<Apartment> create(@RequestBody @Valid Apartment apartment) {
-        return new ResponseEntity<>(apartmentService.save(apartment), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(apartmentService.save(apartment), HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Apartment> update(@RequestBody @Valid Apartment apartment, @PathVariable("id") Long id) {
-        return new ResponseEntity<>(apartmentService.update(apartment, id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(apartmentService.update(apartment, id), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
     @DeleteMapping("/{id}")
