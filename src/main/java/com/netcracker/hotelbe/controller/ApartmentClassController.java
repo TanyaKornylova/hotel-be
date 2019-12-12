@@ -30,7 +30,7 @@ public class ApartmentClassController {
     }
 
     @PostMapping
-    public ResponseEntity<ApartmentClass> create(@RequestBody @Valid ApartmentClass apartmentClass) {
+    public ResponseEntity<ApartmentClass> add(@RequestBody @Valid ApartmentClass apartmentClass) {
         try {
             return new ResponseEntity<>(apartmentClassService.save(apartmentClass),
                     HttpStatus.OK);

@@ -4,10 +4,15 @@ import com.netcracker.hotelbe.entity.ApartmentPrice;
 import com.netcracker.hotelbe.service.ApartmentPriceService;
 import com.netcracker.hotelbe.utils.RuntimeExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,6 +21,10 @@ public class ApartmentPriceController {
 
     @Autowired
     private ApartmentPriceService apartmentPriceService;
+
+    @Autowired
+    @Qualifier("apartmentPriceValidator")
+    private Validator apartmentPriceValidator;
 
     @GetMapping
     public ResponseEntity<List<ApartmentPrice>> getAll() {
@@ -28,7 +37,12 @@ public class ApartmentPriceController {
     }
 
     @PostMapping
-    public ResponseEntity<ApartmentPrice> create(@RequestBody ApartmentPrice apartmentPrice) {
+    public ResponseEntity<ApartmentPrice> add(@RequestBody @Valid ApartmentPrice apartmentPrice, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        apartmentPriceValidator.validate(apartmentPrice, bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
+
         try {
             return new ResponseEntity<>(apartmentPriceService.save(apartmentPrice), HttpStatus.CREATED);
         } catch (RuntimeException e) {
@@ -37,7 +51,12 @@ public class ApartmentPriceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApartmentPrice> update(@RequestBody ApartmentPrice apartmentPrice, @PathVariable("id") Long id) {
+    public ResponseEntity<ApartmentPrice> update(@RequestBody @Valid ApartmentPrice apartmentPrice, @PathVariable("id") Long id, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        apartmentPriceValidator.validate(apartmentPrice, bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
+
         try {
             return new ResponseEntity<>(apartmentPriceService.update(apartmentPrice, id), HttpStatus.OK);
         } catch (RuntimeException e) {

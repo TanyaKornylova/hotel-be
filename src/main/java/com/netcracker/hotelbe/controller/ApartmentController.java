@@ -29,7 +29,7 @@ public class ApartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Apartment> create(@RequestBody @Valid Apartment apartment) {
+    public ResponseEntity<Apartment> add(@RequestBody @Valid Apartment apartment) {
         try {
             return new ResponseEntity<>(apartmentService.save(apartment), HttpStatus.CREATED);
         } catch (RuntimeException e) {

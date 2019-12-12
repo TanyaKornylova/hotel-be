@@ -2,14 +2,15 @@ package com.netcracker.hotelbe.service.validation;
 
 import com.netcracker.hotelbe.entity.ApartmentPrice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintViolation;
 import java.sql.Timestamp;
 import java.util.Set;
 
+@Service
 public class ApartmentPriceValidator implements Validator {
 
     @Autowired
@@ -36,31 +37,18 @@ public class ApartmentPriceValidator implements Validator {
 
         Timestamp currentTime = new Timestamp(System.currentTimeMillis() - 120000);
 
-        if(apartmentPrice.getStartPeriod().compareTo(currentTime) < 0){
-            errors.rejectValue("startPeriod","", "Start period cant be before current date ");
+        if (apartmentPrice.getStartPeriod().compareTo(currentTime) < 0) {
+            errors.rejectValue("startPeriod", "", "Start period cant be before current date ");
         }
-        if(apartmentPrice.getEndPeriod().compareTo(currentTime) < 0){
-            errors.rejectValue("end","", "End period cant be before current date ");
+        if (apartmentPrice.getEndPeriod().compareTo(currentTime) < 0) {
+            errors.rejectValue("end", "", "End period cant be before current date ");
         }
-        if(apartmentPrice.getEndPeriod().compareTo(apartmentPrice.getStartPeriod()) < 0){
-            errors.rejectValue("end","", "End period cant be before Start period");
+        if (apartmentPrice.getEndPeriod().compareTo(apartmentPrice.getStartPeriod()) < 0) {
+            errors.rejectValue("end", "", "End period cant be before Start period");
+        }
+        if (apartmentPrice.getPrice() < 0) {
+            errors.rejectValue("price", "", "Price cant be less then 0");
         }
 
-
-
-
-//        if(task.getComplete() != null )
-//            if (task.getComplete().compareTo(task.getAccept()) < 0){
-//                errors.rejectValue("complete","", "Complete date cant be before Start date");
-//            }
-//
-//        if(task.getExecutor() != null)
-//            if(task.getExecutor().isActive()){
-//                errors.rejectValue("executor","", "Executor should be active");
-//            }
-//
-//        if(task.getCreator().isActive()){
-//            errors.rejectValue("creator","", "Creator should be active");
-//        }
     }
 }

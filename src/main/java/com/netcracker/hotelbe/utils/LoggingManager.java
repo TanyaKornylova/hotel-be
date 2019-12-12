@@ -13,8 +13,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Aspect
 @Component
 public class LoggingManager {
@@ -45,7 +43,7 @@ public class LoggingManager {
     }
 
     @AfterThrowing(value = "allPointcut()", throwing = "e")
-    public void logAllThrowing(JoinPoint joinPoint, Throwable e) throws Throwable {
+    public void logAllThrowing(JoinPoint joinPoint, Throwable e) {
         Throwable rootCause = Throwables.getRootCause(e);
         if (rootCause instanceof PSQLException) {
             return;
