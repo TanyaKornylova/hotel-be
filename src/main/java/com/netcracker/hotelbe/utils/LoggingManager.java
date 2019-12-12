@@ -13,6 +13,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 public class LoggingManager {
@@ -29,6 +31,7 @@ public class LoggingManager {
         String methodName = pjp.getSignature().getName();
         String className = pjp.getTarget().getClass().toString();
         Object object = pjp.proceed();
+
         if (className.contains("com.netcracker.hotelbe.controller")) {
             log.info(className + " : " + methodName + "() " + "Response : "
                     + new ObjectMapper().writeValueAsString(object));
@@ -47,10 +50,18 @@ public class LoggingManager {
         if (rootCause instanceof PSQLException) {
             return;
         }
+
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().toString();
-        log.error(className + " : " + methodName + "() " + " : "
-                + new ObjectMapper().writeValueAsString(joinPoint.getArgs()), e);
+        Object[] args = joinPoint.getArgs();
+        StringBuilder arguments = new StringBuilder();
+
+        for (int i = 0; i < args.length; i++) {
+            arguments.append(i + 1).append(": ").append(args[i]).append(";\n\t");
+        }
+
+        log.error(className + " : " + methodName + "() " + " arguments:\n\t"
+                + arguments, e);
     }
 
 }

@@ -21,7 +21,7 @@ public class ApartmentPrice implements Serializable {
     @NotNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "price")
     @Min(value = 0, message = "Price cant be less then 0")

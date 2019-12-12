@@ -22,7 +22,7 @@ public class ApartmentClass implements Serializable {
     @NotNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name_class")
     private String nameClass;
