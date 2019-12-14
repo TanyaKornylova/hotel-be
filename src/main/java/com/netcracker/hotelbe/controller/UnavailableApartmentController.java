@@ -6,6 +6,8 @@ import com.netcracker.hotelbe.utils.RuntimeExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,7 +31,9 @@ public class UnavailableApartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<UnavailableApartment> create(@RequestBody @Valid UnavailableApartment unavailableApartment) {
+    public ResponseEntity<UnavailableApartment> add(@RequestBody @Valid UnavailableApartment unavailableApartment, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        unavailableApartmentService.validate(unavailableApartment, bindingResult);
+
         try {
             return new ResponseEntity<>(unavailableApartmentService.save(unavailableApartment), HttpStatus.CREATED);
         } catch (RuntimeException e) {
@@ -39,7 +43,9 @@ public class UnavailableApartmentController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<UnavailableApartment> update(@RequestBody @Valid UnavailableApartment unavailableApartment, @PathVariable("id") final Long id) {
+    public ResponseEntity<UnavailableApartment> update(@RequestBody @Valid UnavailableApartment unavailableApartment, @PathVariable("id") final Long id, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        unavailableApartmentService.validate(unavailableApartment, bindingResult);
+
         try {
             return new ResponseEntity<>(unavailableApartmentService.update(unavailableApartment, id), HttpStatus.OK);
         } catch (RuntimeException e) {

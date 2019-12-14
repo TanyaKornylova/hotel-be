@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 public class UnavailableApartment {
 
     @Id
-    @NotNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

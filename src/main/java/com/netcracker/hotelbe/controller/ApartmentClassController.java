@@ -7,6 +7,8 @@ import com.netcracker.hotelbe.utils.RuntimeExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,7 +32,9 @@ public class ApartmentClassController {
     }
 
     @PostMapping
-    public ResponseEntity<ApartmentClass> add(@RequestBody @Valid ApartmentClass apartmentClass) {
+    public ResponseEntity<ApartmentClass> add(@RequestBody @Valid ApartmentClass apartmentClass, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        apartmentClassService.validate(apartmentClass, bindingResult);
+
         try {
             return new ResponseEntity<>(apartmentClassService.save(apartmentClass),
                     HttpStatus.OK);
@@ -40,7 +44,9 @@ public class ApartmentClassController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApartmentClass> update(@RequestBody @Valid ApartmentClass apartmentClass, @PathVariable Long id) {
+    public ResponseEntity<ApartmentClass> update(@RequestBody @Valid ApartmentClass apartmentClass, @PathVariable Long id, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        apartmentClassService.validate(apartmentClass, bindingResult);
+
         try {
             return new ResponseEntity<>(apartmentClassService.update(apartmentClass, id), HttpStatus.OK);
         } catch (RuntimeException e) {

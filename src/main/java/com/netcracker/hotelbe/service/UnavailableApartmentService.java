@@ -4,7 +4,11 @@ import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.entity.UnavailableApartment;
 import com.netcracker.hotelbe.repository.UnavailableApartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -17,6 +21,10 @@ public class UnavailableApartmentService {
 
     @Autowired
     private ApartmentService apartmentService;
+
+    @Autowired
+    @Qualifier("unavailableApartmentValidator")
+    private Validator unavailableApartmentValidator;
 
     public List<UnavailableApartment> getAll() {
         return unavailableApartmentRepository.findAll();
@@ -55,5 +63,12 @@ public class UnavailableApartmentService {
         );
 
         unavailableApartmentRepository.delete(delete);
+    }
+
+    public void validate(final UnavailableApartment unavailableApartment, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        unavailableApartmentValidator.validate(unavailableApartment, bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
     }
 }

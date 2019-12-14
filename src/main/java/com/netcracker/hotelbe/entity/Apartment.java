@@ -25,7 +25,6 @@ import java.util.List;
 public class Apartment implements Serializable {
 
     @Id
-    @NotNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

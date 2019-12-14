@@ -1,6 +1,6 @@
 package com.netcracker.hotelbe.service.validation;
 
-import com.netcracker.hotelbe.entity.ApartmentPrice;
+import com.netcracker.hotelbe.entity.UnavailableApartment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -11,19 +11,18 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 @Service
-public class ApartmentPriceValidator implements Validator {
+public class UnavailableApartmentValidator implements Validator {
 
     @Autowired
     private javax.validation.Validator validator;
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return ApartmentPrice.class.equals(aClass);
+        return UnavailableApartment.class.equals(aClass);
     }
 
     @Override
     public void validate(final Object o, Errors errors) {
-
         Set<ConstraintViolation<Object>> validates = validator.validate(o);
 
         validates.forEach(
@@ -33,21 +32,15 @@ public class ApartmentPriceValidator implements Validator {
                         cv.getMessage())
         );
 
-        ApartmentPrice apartmentPrice = (ApartmentPrice) o;
+        UnavailableApartment unavailableApartment = (UnavailableApartment) o;
 
         Timestamp currentTime = new Timestamp(System.currentTimeMillis() - 120000);
 
-        if (apartmentPrice.getStartPeriod().compareTo(currentTime) < 0) {
-            errors.rejectValue("startPeriod", "", "Start period cant be before current date ");
+        if (unavailableApartment.getStartDate().compareTo(currentTime) < 0) {
+            errors.rejectValue("startDate","", "Start date cant be before current date ");
         }
-        if (apartmentPrice.getEndPeriod().compareTo(currentTime) < 0) {
-            errors.rejectValue("endPeriod", "", "End period cant be before current date ");
-        }
-        if (apartmentPrice.getEndPeriod().compareTo(apartmentPrice.getStartPeriod()) < 0) {
-            errors.rejectValue("endPeriod", "", "End period cant be before Start period");
-        }
-        if (apartmentPrice.getPrice() < 0) {
-            errors.rejectValue("price", "", "Price cant be less then 0");
+        if (unavailableApartment.getEndDate().compareTo(currentTime) < 0) {
+            errors.rejectValue("endDate","", "End date cant be before current date ");
         }
     }
 }

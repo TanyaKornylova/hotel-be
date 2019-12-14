@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -19,7 +20,6 @@ import java.util.List;
 public class ApartmentClass implements Serializable {
 
     @Id
-    @NotNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,4 +49,19 @@ public class ApartmentClass implements Serializable {
 //    @ToString.Exclude
     @OneToMany(mappedBy = "apartmentClass", fetch = FetchType.LAZY)
     private List<Booking> bookings;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ApartmentClass that = (ApartmentClass) o;
+        return numberOfRooms == that.numberOfRooms &&
+                numberOfCouchette == that.numberOfCouchette &&
+                Objects.equals(nameClass, that.nameClass);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nameClass, numberOfRooms, numberOfCouchette);
+    }
 }

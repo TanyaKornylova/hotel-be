@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 public class ApartmentPrice implements Serializable {
 
     @Id
-    @NotNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
