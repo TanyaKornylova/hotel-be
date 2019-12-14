@@ -14,4 +14,5 @@ public interface ApartmentClassRepository extends JpaRepository<ApartmentClass, 
     Optional<ApartmentClass> findById(Long id);
 
     List<ApartmentClass> findByNameClassAndNumberOfCouchetteAndNumberOfRooms(String name, int numberOfCouchette, int numberOfRooms);
+
 }

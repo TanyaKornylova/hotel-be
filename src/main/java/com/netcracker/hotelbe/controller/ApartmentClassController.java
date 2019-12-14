@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -56,9 +57,12 @@ public class ApartmentClassController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") final Long id) {
-        apartmentClassService.deleteById(id);
+        try {
+            apartmentClassService.deleteById(id);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
 
         return new ResponseEntity(HttpStatus.OK);
     }
-
 }

@@ -35,7 +35,7 @@ public class ApartmentPrice implements Serializable {
     private Timestamp endPeriod;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "apartment_id")
+    @JoinColumn(name = "apartmentClass_id")
     private ApartmentClass apartmentClass;
 
 }

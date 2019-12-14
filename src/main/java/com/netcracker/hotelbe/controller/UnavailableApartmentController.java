@@ -55,8 +55,11 @@ public class UnavailableApartmentController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") final Long id) {
-        unavailableApartmentService.deleteById(id);
-
+        try {
+            unavailableApartmentService.deleteById(id);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
         return new ResponseEntity(HttpStatus.OK);
     }
 }
