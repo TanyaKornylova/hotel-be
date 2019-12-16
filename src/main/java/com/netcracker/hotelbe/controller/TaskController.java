@@ -2,6 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.Task;
 import com.netcracker.hotelbe.service.TaskService;
+import com.netcracker.hotelbe.utils.RuntimeExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -26,36 +27,44 @@ public class TaskController {
     private Validator taskValidator;
 
     @GetMapping
-    public ResponseEntity<List<Task>> getAllTasks(){
+    public ResponseEntity<List<Task>> getAllTasks() {
         return new ResponseEntity<>(taskService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id){
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Long> addTask(@RequestBody @Valid Task task, BindingResult bindingResult) throws MethodArgumentNotValidException {
         taskValidator.validate(task, bindingResult);
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
-        return new ResponseEntity<>(taskService.save(task).getId(), HttpStatus.OK );
+        try {
+            return new ResponseEntity<>(taskService.save(task).getId(), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTaskById(@RequestBody @Valid Task task, @PathVariable("id") Long id, BindingResult bindingResult) throws MethodArgumentNotValidException{
+    public ResponseEntity<Task> updateTaskById(@RequestBody @Valid Task task, @PathVariable("id") Long id, BindingResult bindingResult) throws MethodArgumentNotValidException {
         task.setId(id);
         taskValidator.validate(task, bindingResult);
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
-        return new ResponseEntity<>(taskService.save(task), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(taskService.save(task), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity deleteTaskById(@PathVariable Long id){
+    private ResponseEntity deleteTaskById(@PathVariable Long id) {
         taskService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }

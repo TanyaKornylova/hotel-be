@@ -1,13 +1,9 @@
 package com.netcracker.hotelbe.service;
 
-import com.netcracker.hotelbe.entity.Apartment;
 import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.entity.Booking;
 import com.netcracker.hotelbe.entity.User;
 import com.netcracker.hotelbe.repository.BookingRepository;
-import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +13,7 @@ import java.util.List;
 
 @Service
 public class BookingService {
-    private static Logger logger = LogManager.getLogger(ApartmentClassService.class);
-    private final static String ENTITY_NAME = Booking.class.getSimpleName();
+
     @Autowired
     BookingRepository bookingRepository;
 
@@ -69,7 +64,6 @@ public class BookingService {
         update.setReview(booking.getReview());
         update.setTotalPrice(booking.getTotalPrice());
         update.setApartment(booking.getApartment());
-        logger.trace(String.format(CustomEntityLogMessage.UPDATED_ENTITY_SAVED, ENTITY_NAME));
         return bookingRepository.save(update);
     }
 
@@ -77,7 +71,6 @@ public class BookingService {
         Booking delete = bookingRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.valueOf(id))
         );
-        logger.trace(String.format(CustomEntityLogMessage.FOUND_ENTITY_FOR_DELETE, ENTITY_NAME));
 
         bookingRepository.delete(delete);
     }

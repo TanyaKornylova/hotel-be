@@ -18,10 +18,9 @@ import java.sql.Timestamp;
 public class ApartmentPrice implements Serializable {
 
     @Id
-    @NotNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "price")
     @Min(value = 0, message = "Price cant be less then 0")
@@ -36,7 +35,7 @@ public class ApartmentPrice implements Serializable {
     private Timestamp endPeriod;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "apartment_id")
+    @JoinColumn(name = "apartmentClass_id")
     private ApartmentClass apartmentClass;
 
 }

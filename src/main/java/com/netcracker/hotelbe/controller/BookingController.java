@@ -2,6 +2,7 @@ package com.netcracker.hotelbe.controller;
 
 import com.netcracker.hotelbe.entity.Booking;
 import com.netcracker.hotelbe.service.BookingService;
+import com.netcracker.hotelbe.utils.RuntimeExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
 
 
 @RestController
@@ -26,8 +26,12 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<Booking> create(@RequestBody @Valid Booking booking) {
-        return new ResponseEntity<>(bookingService.save(booking),
-                HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(bookingService.save(booking),
+                    HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
     @GetMapping("/{id}")
@@ -36,8 +40,12 @@ public class BookingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Booking> update(@RequestBody @Valid Booking booking, @PathVariable("id") final  Long id) {
-        return new ResponseEntity<>(bookingService.update(booking, id), HttpStatus.OK);
+    public ResponseEntity<Booking> update(@RequestBody @Valid Booking booking, @PathVariable("id") final Long id) {
+        try {
+            return new ResponseEntity<>(bookingService.update(booking, id), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -1,12 +1,8 @@
 package com.netcracker.hotelbe.controller;
 
 
-import com.google.common.base.Throwables;
-import com.sun.javafx.binding.StringFormatter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
-import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,18 +37,4 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {RuntimeException.class})
-    protected ResponseEntity<Object> handlePSQLException(RuntimeException runtimeException) {
-        Throwable rootCause = Throwables.getRootCause(runtimeException);
-        String logMessage;
-        String responseMessage = runtimeException.getMessage();
-        if (rootCause instanceof PSQLException) {
-            logMessage = rootCause.getMessage();
-            responseMessage = logMessage.split("Detail: ")[1];
-            if (logger.isEnabledFor(Priority.ERROR)) {
-                logger.error(logMessage);
-            }
-        }
-        return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
-    }
 }

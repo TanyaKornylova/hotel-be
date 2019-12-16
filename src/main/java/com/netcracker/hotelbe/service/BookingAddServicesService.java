@@ -1,13 +1,8 @@
 package com.netcracker.hotelbe.service;
 
-import com.netcracker.hotelbe.entity.ApartmentClass;
 import com.netcracker.hotelbe.entity.BookingAddServices;
 import com.netcracker.hotelbe.repository.BookingAddServicesRepository;
-import com.netcracker.hotelbe.utils.CustomEntityLogMessage;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
