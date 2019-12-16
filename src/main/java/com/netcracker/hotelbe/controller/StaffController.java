@@ -4,6 +4,7 @@ package com.netcracker.hotelbe.controller;
 import com.netcracker.hotelbe.entity.Staff;
 import com.netcracker.hotelbe.service.StaffService;
 import com.netcracker.hotelbe.service.UserService;
+import com.netcracker.hotelbe.utils.RuntimeExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,34 +24,39 @@ public class StaffController {
 
 
     @GetMapping
-    public ResponseEntity<List<Staff>> getAllStaff(){
+    public ResponseEntity<List<Staff>> getAllStaff() {
         return new ResponseEntity<>(staffService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Staff> getStaffById(@PathVariable Long id){
+    public ResponseEntity<Staff> getStaffById(@PathVariable Long id) {
         return new ResponseEntity<>(staffService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Long> addStaff(@RequestBody @Valid Staff staff){
-        return new ResponseEntity<>(staffService.save(staff).getId(), HttpStatus.OK);
+    public ResponseEntity<Long> addStaff(@RequestBody @Valid Staff staff) {
+        try {
+            return new ResponseEntity<>(staffService.save(staff).getId(), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateStaff(@RequestBody @Valid Staff staff, @PathVariable("id") Long id){
+    public ResponseEntity<Long> updateStaff(@RequestBody @Valid Staff staff, @PathVariable("id") Long id) {
         staff.setId(id);
         staff.setUser(userService.findById(id));
-        return new ResponseEntity<>(staffService.save(staff).getId(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(staffService.save(staff).getId(), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return RuntimeExceptionHandler.handlePSQLException(e);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteStaff(@PathVariable Long id){
+    public ResponseEntity deleteStaff(@PathVariable Long id) {
         staffService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
-
-
-
 }

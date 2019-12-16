@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class BookingAddServicesService {
+
     @Autowired
     private BookingAddServicesRepository bookingAddServicesRepository;
 
@@ -23,15 +24,15 @@ public class BookingAddServicesService {
         return bookingAddServicesRepository.findAll();
     }
 
-    public BookingAddServices save(BookingAddServices staff){
-        return bookingAddServicesRepository.save(staff);
+    public BookingAddServices save(BookingAddServices bookingAddServices){
+        return bookingAddServicesRepository.save(bookingAddServices);
     }
 
-    public Long deleteById(Long id){
-        if (!bookingAddServicesRepository.findById(id).isPresent()){
-            throw new EntityNotFoundException(String.valueOf(id));
-        }
-        bookingAddServicesRepository.deleteById(id);
-        return id;
+    public void deleteById(Long id){
+        BookingAddServices delete = bookingAddServicesRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.valueOf(id))
+        );
+        bookingAddServicesRepository.delete(delete);
+
     }
 }

@@ -13,11 +13,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
+
 @Aspect
 @Component
 public class LoggingManager {
 
-    private Logger log = LogManager.getLogger(LoggingManager.class);
+    private static final Logger LOG = LogManager.getLogger(LoggingManager.class);
 
     @Pointcut("execution(* com.netcracker.hotelbe.*.*.*(..) )")
     public void allPointcut() {
@@ -25,16 +27,17 @@ public class LoggingManager {
     }
 
     @Around("allPointcut()")
-    public Object logControllerMethods(ProceedingJoinPoint pjp) throws Throwable {
+    public Object logControllerMethods(final ProceedingJoinPoint pjp) throws Throwable {
         String methodName = pjp.getSignature().getName();
         String className = pjp.getTarget().getClass().toString();
         Object object = pjp.proceed();
+
         if (className.contains("com.netcracker.hotelbe.controller")) {
-            log.info(className + " : " + methodName + "() " + "Response : "
+            LOG.info(className + " : " + methodName + "() " + "Response : "
                     + new ObjectMapper().writeValueAsString(object));
         }
         if (className.contains("com.netcracker.hotelbe.service")) {
-            log.info(className + " : " + methodName + "() " + "Return : "
+            LOG.trace(className + " : " + methodName + "() " + "Return : "
                     + new ObjectMapper().writeValueAsString(object));
         }
 
@@ -42,15 +45,23 @@ public class LoggingManager {
     }
 
     @AfterThrowing(value = "allPointcut()", throwing = "e")
-    public void logAllThrowing(JoinPoint joinPoint, Throwable e) throws Throwable {
+    public void logAllThrowing(final JoinPoint joinPoint, final Throwable e) {
         Throwable rootCause = Throwables.getRootCause(e);
-        if (rootCause instanceof PSQLException) {
+        if (rootCause instanceof PSQLException || rootCause instanceof EntityNotFoundException) {
             return;
         }
+
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().toString();
-        log.error(className + " : " + methodName + "() " + " : "
-                + new ObjectMapper().writeValueAsString(joinPoint.getArgs()), e);
+        Object[] args = joinPoint.getArgs();
+        StringBuilder arguments = new StringBuilder();
+
+        for (int i = 0; i < args.length; i++) {
+            arguments.append(i + 1).append(": ").append(args[i]).append(";\n\t");
+        }
+
+        LOG.error(className + " : " + methodName + "() " + " arguments:\n\t"
+                + arguments, e);
     }
 
 }
